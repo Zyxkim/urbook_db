@@ -1,0 +1,101 @@
+{% extends "base.html" %} {% block title %}Login{% endblock %} {% block content %}
+    <div class="gradient_bg">
+        <ul class="circles">
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+        <div class="mask d-flex align-items-center h-100">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-12 col-md-10 col-lg-7 col-xl-6">
+                        <div class="card">
+                            <div class="card-body p-5">
+                                <div class="my-4">
+                                    <div class="text-center mb-3"><span
+                                            style="color: #4A148C; font-size: 60pt; font-weight: bold">Ur</span><span
+                                            style="color: #FF4081; font-size: 60pt; font-weight: bold">Book</span>
+                                    </div>
+                                    <form method="POST">
+                                        <div class="form-outline mb-4">
+                                            <input
+                                                    type="email"
+                                                    class="form-control"
+                                                    id="email"
+                                                    name="email"
+                                                    placeholder="Введите e-mail"
+                                            />
+                                            <label class="form-label" for="form2Example1">E-mail</label>
+                                        </div>
+
+                                        <div class="form-outline mb-4">
+                                            <input
+                                                    type="text"
+                                                    class="form-control"
+                                                    id="firstName"
+                                                    name="firstName"
+                                                    placeholder="Введите никнейм"
+                                            />
+                                            <label class="form-label" for="form2Example2">Никнейм</label>
+                                        </div>
+
+                                        <div class="form-outline mb-4">
+                                            <input
+                                                    type="password"
+                                                    class="form-control"
+                                                    id="password1"
+                                                    name="password1"
+                                                    placeholder="Введите пароль"
+                                            />
+                                            <label class="form-label" for="form2Example2">Пароль</label>
+                                        </div>
+
+                                        <div class="form-outline mb-4">
+                                            <input
+                                                    type="password"
+                                                    class="form-control"
+                                                    id="password2"
+                                                    name="password2"
+                                                    placeholder="Подтверждение пароля"
+                                            />
+                                            <label class="form-label" for="form2Example2">Пароль</label>
+                                        </div>
+
+                                        {% with messages = get_flashed_messages(with_categories=true) %} {% if
+                                        messages %} {% for category, message in messages %} {% if category == 'error' %}
+                                            <div class="alert alert-danger alter-dismissable fade show" role="alert">
+                                                {{ message }}
+                                                <button type="button" class="close" data-dismiss="alert">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+
+                                        {% endif %} {% endfor %} {% endif %} {% endwith %}
+
+                                        <button type="submit" class="btn btn-primary btn-block mb-4">
+                                            Зарегистрироваться
+                                        </button>
+
+                                        <div class="text-center">
+                                            <p style="color: dimgrey">Уже есть аккаунт? <a href="/login"
+                                                                                           style="color: black">Войдите</a>
+                                            </p>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
