@@ -4,7 +4,6 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from . import db
 from flask_login import login_user, login_required, logout_user, current_user
 
-
 auth = Blueprint('auth', __name__)
 
 
@@ -39,7 +38,7 @@ def logout():
 def sign_up():
     if request.method == 'POST':
         email = request.form.get('email')
-        first_name = request.form.get('firstName')
+        nickname = request.form.get('firstName')
         password1 = request.form.get('password1')
         password2 = request.form.get('password2')
 
@@ -48,15 +47,14 @@ def sign_up():
             flash('Аккаунт с таким e-mail существует.', category='error')
         elif len(email) < 4:
             flash('Минимальная длина e-mail - 4 символа.', category='error')
-        elif len(first_name) < 2:
+        elif len(nickname) < 2:
             flash('Минимальная длина ника - 2 символа.', category='error')
         elif password1 != password2:
             flash('Пароли не совпадают.', category='error')
         elif len(password1) < 4:
             flash('Минимальная длина пароля - 4 символа.', category='error')
         else:
-            new_user = User(email=email, first_name=first_name, password=generate_password_hash(
-                password1, method='sha256'))
+            new_user = User(email=email, nickname=nickname, password=generate_password_hash(password1, method='sha256'))
             db.session.add(new_user)
             db.session.commit()
             login_user(new_user, remember=True)
