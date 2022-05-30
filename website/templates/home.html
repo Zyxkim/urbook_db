@@ -1,89 +1,106 @@
 {% extends "base.html" %} {% block title %}Home{% endblock %} {% block content %}
-    <div>
-        <nav style="background-color: white" class="navbar navbar-expand-lg fixed-top">
-            <div class="container-fluid">
-                <a class="navbar-brand">
-                    <div class="text-center"><span
-                            style="color: #4A148C; font-size: 16pt; font-weight: bold">Ur</span><span
-                            style="color: #FF4081; font-size: 16pt; font-weight: bold">Book</span>
-                    </div>
-                </a>
+    <header class="header text-center static_gradient_bg">
+        <ul class="circles">
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+        <nav class="navbar navbar-expand-lg navbar-dark">
 
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/">Лента</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation"
+                    aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div id="navigation" class="collapse navbar-collapse flex-column">
+                <div class="profile-section pt-3 pt-lg-0">
+                    <img class="profile-image rounded-circle mx-auto"
+                         style="width: 150px; height: 150px"
+                         src="/static/images/3.png" alt="image">
+                    <h1 class="blog-name pt-lg-4 mb-0">
+                        {{ user.first_name }}
+                    </h1>
+                    <div class="bio mb-3">Status</div>
+
+                    <hr>
+                </div>
+
+                <ul class="navbar-nav flex-column text-left">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="index.html"><i class="fas fa-home fa-fw mr-2"></i>Stories</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/">Комнаты</a>
+                        <a class="nav-link" href="blog-post.html"><i
+                                class="fas fa-bookmark fa-fw mr-2"></i>Characters</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/">Профиль</a>
+                        <a class="nav-link" href="about.html"><i class="fas fa-user fa-fw mr-2"></i>Rooms</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="about.html"><i class="fas fa-cog fa-fw mr-2"></i>Settings</a>
                     </li>
                 </ul>
 
-                <div class="d-flex align-items-center">
-                    <a class="text-reset me-3" href="#">
-                        <a href="/logout">
-                            <i style="color: #4A148C" class="fas fa-sign-out-alt"></i>
-                        </a>
-                    </a>
-
+                <div class="my-2 my-md-3">
+                    <a class="btn btn-primary" href="/logout" target="_blank">Log Out</a>
                 </div>
             </div>
         </nav>
+    </header>
 
-        <div class="row d-flex justify-content-center text-center">
-            <div class="col-2">
-            </div>
-            <div class="col-8">
-                <h1 align="center">Notes</h1>
-                <div class="sidebar">
-                    {% for note in user.notes %}
-                        <div class="col">
-                            <div class="card h-100">
-                                <img src="https://mdbcdn.b-cdn.net/img/new/standard/city/044.webp"
-                                     class="card-img-top"
-                                     style="height: 150px"
-                                     alt="Skyscrapers"/>
-                                <div class="card-body">
-                                    <h6 class="card-title">{{ note.data }}</h6>
-                                </div>
-                            </div>
-                        </div>
-                    {% endfor %}
-                </div>
-                <div class="content">
-                    <div class="row row-cols-1 row-cols-md-1 g-4">
-
-                        {% for note in user.notes %}
-                            <div class="col">
-                                <div class="card h-100">
-                                    <div class="card-body">
-                                        <h6 class="card-title">{{ note.data }}</h6>
-                                        <p class="card-text">
-                                            {{ note.data }}
-                                        </p>
-                                    </div>
-                                    <div class="card-footer">
-                                        <small class="text-muted">Last updated 3 mins ago</small>
-                                    </div>
-                                </div>
-                            </div>
-                        {% endfor %}
-
+    <div class="main-wrapper">
+        <section class="cta-section theme-bg-light py-5">
+            <div class="container text-center">
+                <h2 class="heading">Search post</h2>
+                <form class="signup-form form-inline justify-content-center pt-3">
+                    <div class="form-group">
+                        <input type="text" id="text" name="text" class="form-control mr-md-1 semail"
+                               placeholder="Search...">
                     </div>
-                </div>
-                <form method="POST">
-                    <textarea name="note" id="note" class="form-control"></textarea>
-                    <br/>
-                    <div align="center">
-                        <button type="submit" class="btn btn-primary">Add Note</button>
-                    </div>
+                    <button type="submit" class="btn btn-outline-primary mr-1"><i class="fas fa-search"></i></button>
+                    <button type="button" class="btn btn-outline-primary"><i class="fas fa-plus"></i></button>
                 </form>
             </div>
-            <div class="col-2">
+        </section>
+        <section class="blog-list px-3 py-5 p-md-5">
+            <div class="container">
+                {% for note in user.notes %}
+                    <div class="item mb-5">
+                        <div class="media">
+                            <div class="media-body">
+                                <h3 class="title mb-1">
+                                    <a href="blog-post.html">
+                                        {{ note.data }}
+                                    </a>
+                                </h3>
+                                <div class="meta mb-1">
+                                    <span class="date">
+                                    {{ note.date }}
+                                    </span>
+                                    <span class="readers">
+                                        <a href="#">
+                                            0 readers
+                                        </a>
+                                    </span>
+                                </div>
+                                <div class="intro">
+                                    {{ note.data }}
+                                </div>
+                                <a class="more-link" href="blog-post.html">Read more &rarr;</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+
             </div>
-        </div>
+        </section>
     </div>
 
 {% endblock %}

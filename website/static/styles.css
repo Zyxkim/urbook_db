@@ -19,6 +19,11 @@ body {
     height: 100vh;
 }
 
+.static_gradient_bg {
+    background: linear-gradient(-45deg, #FF80AB, #FF4081, #AB47BC, #4A148C);
+    background-size: 200% 200%;
+}
+
 @keyframes gradient {
     0% {
         background-position: 0% 50%;

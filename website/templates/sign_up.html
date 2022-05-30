@@ -24,7 +24,8 @@
                                             style="color: #FF4081; font-size: 60pt; font-weight: bold">Book</span>
                                     </div>
                                     <form method="POST">
-                                        <div class="form-outline mb-4">
+                                        <div class="input-group flex-nowrap mb-3">
+                                            <span class="input-group-text" id="addon-wrapping"><i class="fas fa-envelope"></i></span>
                                             <input
                                                     type="email"
                                                     class="form-control"
@@ -32,10 +33,10 @@
                                                     name="email"
                                                     placeholder="Введите e-mail"
                                             />
-                                            <label class="form-label" for="form2Example1">E-mail</label>
                                         </div>
 
-                                        <div class="form-outline mb-4">
+                                        <div class="input-group flex-nowrap mb-3">
+                                            <span class="input-group-text" id="addon-wrapping"><i class="fas fa-user-circle"></i></span>
                                             <input
                                                     type="text"
                                                     class="form-control"
@@ -43,10 +44,10 @@
                                                     name="firstName"
                                                     placeholder="Введите никнейм"
                                             />
-                                            <label class="form-label" for="form2Example2">Никнейм</label>
                                         </div>
 
-                                        <div class="form-outline mb-4">
+                                        <div class="input-group flex-nowrap mb-3">
+                                            <span class="input-group-text" id="addon-wrapping"><i class="fas fa-key"></i></span>
                                             <input
                                                     type="password"
                                                     class="form-control"
@@ -54,10 +55,10 @@
                                                     name="password1"
                                                     placeholder="Введите пароль"
                                             />
-                                            <label class="form-label" for="form2Example2">Пароль</label>
                                         </div>
 
-                                        <div class="form-outline mb-4">
+                                        <div class="input-group flex-nowrap mb-3">
+                                            <span class="input-group-text" id="addon-wrapping"><i class="fas fa-key"></i></span>
                                             <input
                                                     type="password"
                                                     class="form-control"
@@ -65,7 +66,6 @@
                                                     name="password2"
                                                     placeholder="Подтверждение пароля"
                                             />
-                                            <label class="form-label" for="form2Example2">Пароль</label>
                                         </div>
 
                                         {% with messages = get_flashed_messages(with_categories=true) %} {% if
