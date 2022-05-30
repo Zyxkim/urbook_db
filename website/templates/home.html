@@ -1,21 +1,89 @@
-{% extends "base.html" %} {% block title %}Home{% endblock %} {% block content
-%}
-<h1 align="center">Notes</h1>
-<ul class="list-group list-group-flush" id="notes">
-  {% for note in user.notes %}
-  <li class="list-group-item">
-    {{ note.data }}
-    <button type="button" class="close" onClick="deleteNote({{ note.id }})">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </li>
-  {% endfor %}
-</ul>
-<form method="POST">
-  <textarea name="note" id="note" class="form-control"></textarea>
-  <br />
-  <div align="center">
-    <button type="submit" class="btn btn-primary">Add Note</button>
-  </div>
-</form>
+{% extends "base.html" %} {% block title %}Home{% endblock %} {% block content %}
+    <div>
+        <nav style="background-color: white" class="navbar navbar-expand-lg fixed-top">
+            <div class="container-fluid">
+                <a class="navbar-brand">
+                    <div class="text-center"><span
+                            style="color: #4A148C; font-size: 16pt; font-weight: bold">Ur</span><span
+                            style="color: #FF4081; font-size: 16pt; font-weight: bold">Book</span>
+                    </div>
+                </a>
+
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Лента</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Комнаты</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Профиль</a>
+                    </li>
+                </ul>
+
+                <div class="d-flex align-items-center">
+                    <a class="text-reset me-3" href="#">
+                        <a href="/logout">
+                            <i style="color: #4A148C" class="fas fa-sign-out-alt"></i>
+                        </a>
+                    </a>
+
+                </div>
+            </div>
+        </nav>
+
+        <div class="row d-flex justify-content-center text-center">
+            <div class="col-2">
+            </div>
+            <div class="col-8">
+                <h1 align="center">Notes</h1>
+                <div class="sidebar">
+                    {% for note in user.notes %}
+                        <div class="col">
+                            <div class="card h-100">
+                                <img src="https://mdbcdn.b-cdn.net/img/new/standard/city/044.webp"
+                                     class="card-img-top"
+                                     style="height: 150px"
+                                     alt="Skyscrapers"/>
+                                <div class="card-body">
+                                    <h6 class="card-title">{{ note.data }}</h6>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="content">
+                    <div class="row row-cols-1 row-cols-md-1 g-4">
+
+                        {% for note in user.notes %}
+                            <div class="col">
+                                <div class="card h-100">
+                                    <div class="card-body">
+                                        <h6 class="card-title">{{ note.data }}</h6>
+                                        <p class="card-text">
+                                            {{ note.data }}
+                                        </p>
+                                    </div>
+                                    <div class="card-footer">
+                                        <small class="text-muted">Last updated 3 mins ago</small>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+
+                    </div>
+                </div>
+                <form method="POST">
+                    <textarea name="note" id="note" class="form-control"></textarea>
+                    <br/>
+                    <div align="center">
+                        <button type="submit" class="btn btn-primary">Add Note</button>
+                    </div>
+                </form>
+            </div>
+            <div class="col-2">
+            </div>
+        </div>
+    </div>
+
 {% endblock %}
