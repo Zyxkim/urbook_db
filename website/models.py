@@ -3,13 +3,6 @@ from flask_login import UserMixin
 from sqlalchemy.sql import func
 
 
-class Note(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    data = db.Column(db.String(10000))
-    date = db.Column(db.DateTime(timezone=True), default=func.now())
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-
-
 user_room = db.Table('user_room',
                      db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
                      db.Column('room_id', db.Integer, db.ForeignKey('room.id'), primary_key=True),
@@ -25,13 +18,12 @@ follower_followee = db.Table('follower_followee',
 class User(db.Model, UserMixin):
     __tablename__ = 'user'
     id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(150), unique=True)
-    password = db.Column(db.String(88))
-    nickname = db.Column(db.String(150), unique=True)
+    email = db.Column(db.String(150), unique=True, nullable=False)
+    password = db.Column(db.String(88), nullable=False)
+    nickname = db.Column(db.String(150), unique=True, nullable=False)
     status = db.Column(db.String(255), nullable=True)
     registration_date = db.Column(db.DateTime(timezone=True), default=func.now())
 
-    notes = db.relationship('Note')
     posts = db.relationship('Post')
     messages = db.relationship('Message', backref='user', lazy=True)
     user_room = db.relationship('Room', secondary=user_room, lazy='subquery', backref=db.backref('rooms', lazy=True))
@@ -60,11 +52,10 @@ class Message(db.Model):
 class Post(db.Model):
     __tablename__ = 'post'
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(255))
-    description = db.Column(db.Text)
-    fandom = db.Column(db.String(255))
-    story = db.Column(db.String(255))
-    content = db.Column(db.Text)
+    name = db.Column(db.String(255), nullable=False)
+    description = db.Column(db.Text, nullable=True)
+    fandom = db.Column(db.String(255), nullable=True)
+    content = db.Column(db.Text, nullable=False)
     creation_date = db.Column(db.DateTime(timezone=True), default=func.now())
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     image = db.relationship('Image', backref='post', lazy=True)

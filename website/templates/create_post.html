@@ -1,4 +1,4 @@
-{% extends "base.html" %} {% block title %}Home{% endblock %} {% block content %}
+{% extends "base.html" %} {% block title %}Create Post{% endblock %} {% block content %}
     <header class="header text-center static_gradient_bg">
         <ul class="circles">
             <li></li>
@@ -27,13 +27,13 @@
                     <h1 class="blog-name pt-lg-4 mb-0">
                         {{ user.nickname }}
                     </h1>
-                    <div class="bio mb-3">{{ user.status }}</div>
+                    <div class="bio mb-3">Status</div>
 
                     <hr>
                 </div>
 
                 <ul class="navbar-nav flex-column text-left">
-                    <li class="nav-item active">
+                    <li class="nav-item">
                         <a class="nav-link" href="/"><i class="fas fa-home fa-fw mr-2"></i>Stories</a>
                     </li>
                     <li class="nav-item">
@@ -58,47 +58,39 @@
     <div class="main-wrapper">
         <section class="cta-section theme-bg-light py-5">
             <div class="container text-center">
-                <h2 class="heading">Search post</h2>
-                <form class="signup-form form-inline justify-content-center pt-3">
-                    <div class="form-group">
-                        <input type="text" id="text" name="text" class="form-control mr-md-1 semail"
-                               placeholder="Search...">
-                    </div>
-                    <button type="submit" class="btn btn-outline-primary mr-1"><i class="fas fa-search"></i></button>
-                    <button onclick="location.href = '/create_post';" type="button" class="btn btn-outline-primary"><i class="fas fa-plus"></i></button>
-                </form>
+                <h2 class="heading">Let's create new story!</h2>
             </div>
         </section>
-        <section class="blog-list px-3 py-5 p-md-5">
+        <section class="blog-list px-3 py-5 p-md-4">
             <div class="container">
-                {% for post in user.posts %}
-                    <div class="item mb-5">
-                        <div class="media">
-                            <div class="media-body">
-                                <h3 class="title mb-1">
-                                    <a href="blog-post.html">
-                                        {{ post.name }}
-                                    </a>
-                                </h3>
-                                <div class="meta mb-1">
-                                    <span class="date">
-                                    {{ post.creation_date }}
-                                    </span>
-                                    <span class="readers">
-                                        <a href="#">
-                                            0 readers
-                                        </a>
-                                    </span>
-                                </div>
-                                <div class="intro">
-                                    {{ post.description }}
-                                </div>
-                                <a class="more-link" href="blog-post.html">Read more &rarr;</a>
+                <form method="POST">
+                    <div class="row mb-2">
+                        <div class="col">
+                            <div class="form-outline">
+                                <input type="text" id="name" name="name" class="form-control"/>
+                                <label class="form-label" for="name">Name</label>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-outline">
+                                <input type="text" id="fandom" name="fandom" class="form-control"/>
+                                <label class="form-label" for="fandom">Fandom</label>
                             </div>
                         </div>
                     </div>
-                {% endfor %}
 
+                    <div class="form-outline mb-2">
+                        <textarea class="form-control" name="description" id="description" rows="2"></textarea>
+                        <label class="form-label" for="description">Description</label>
+                    </div>
+
+                    <div class="form-outline mb-2">
+                        <textarea class="form-control" name="content" id="content" rows="4"></textarea>
+                        <label class="form-label" for="content">Story</label>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-block">Save</button>
+                </form>
             </div>
         </section>
     </div>
