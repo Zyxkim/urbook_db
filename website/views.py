@@ -47,3 +47,18 @@ def follow(nickname):
     user_follow = User.query.filter_by(nickname=nickname).first()
     current_user.follow(user_follow)
     db.session.commit()
+
+@views.route('/rooms', methods=['GET', 'POST'])
+def rooms():
+    all_rooms = db.engine.execute("SELECT * FROM room order by creation_date")
+    return render_template("rooms.html", user=current_user, rooms=all_rooms)
+
+@views.route('/get_all_rooms', methods=['GET'])
+def get_all_rooms():
+    all_rooms = db.engine.execute("SELECT * FROM room order by creation_date")
+    d, a = {}, []
+    for rowproxy in all_rooms:
+        for column, value in rowproxy.items():
+            d = {**d, **{column: value}}
+        a.append(d)
+    return {'data' : a}
