@@ -72,17 +72,6 @@
                 </div>
 
                 <div id="rooms">
-                    {% for room in rooms %}
-                        <a href="/rooms?id={{ room.id }}" class="list-group-item list-group-item-action border-0">
-                            <div class="d-flex align-items-start">
-                                <img src=""
-                                     class="rounded-circle mr-1" alt="avatar" width="40" height="40">
-                                <div class="flex-grow-1 ml-3">
-                                    {{ room.name }}
-                                </div>
-                            </div>
-                        </a>
-                    {% endfor %}
                 </div>
 
                 <hr class="d-block d-lg-none mt-1 mb-0">
@@ -161,7 +150,7 @@
         setInterval(function () {
             $.ajax({
                 type: "get",
-                url: "/get_all_rooms",
+                url: "/get_user_rooms",
                 success: function (data) {
                     $("#rooms").empty();
                     data.data.forEach((x, i) => {
@@ -173,7 +162,7 @@
                     });
                 }
             });
-        }, 2000);
+        }, 500);
     </script>
 
 

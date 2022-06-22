@@ -25,7 +25,12 @@ class User(db.Model, UserMixin):
 
     posts = db.relationship('Post')
     messages = db.relationship('Message', backref='user', lazy=True)
-    user_room = db.relationship('Room', secondary=user_room, lazy='subquery', backref=db.backref('rooms', lazy=True))
+    #user_room = db.relationship('Room', secondary=user_room, lazy='subquery', backref=db.backref('rooms', lazy=True))
+    user_room = db.relationship(
+        'Room', secondary=user_room,
+        primaryjoin=(user_room.c.user_id == id),
+        secondaryjoin=(user_room.c.room_id == id),
+        backref=db.backref('users', lazy='dynamic'), lazy='dynamic')
     follower_followee = db.relationship(
         'User', secondary=follower_followee,
         primaryjoin=(follower_followee.c.follower_id == id),
@@ -44,6 +49,12 @@ class User(db.Model, UserMixin):
     def is_following(self, user):
         return self.follower_followee.filter(
             follower_followee.c.follower_id == user.id).count() > 0
+
+    def join_room(self, user, room):
+        self.user_room.append(user, room, "user")
+
+    def get_rooms(self):
+        return self.user_room
 
 
 class Room(db.Model):
