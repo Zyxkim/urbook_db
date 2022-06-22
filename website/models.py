@@ -2,7 +2,6 @@ from . import db
 from flask_login import UserMixin
 from sqlalchemy.sql import func
 
-
 user_room = db.Table('user_room',
                      db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
                      db.Column('room_id', db.Integer, db.ForeignKey('room.id'), primary_key=True),
@@ -10,9 +9,9 @@ user_room = db.Table('user_room',
                      )
 
 follower_followee = db.Table('follower_followee',
-                     db.Column('follower_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
-                     db.Column('followee_id', db.Integer, db.ForeignKey('room.id'), primary_key=True),
-                     )
+                             db.Column('follower_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
+                             db.Column('followee_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
+                             )
 
 
 class User(db.Model, UserMixin):
@@ -27,8 +26,25 @@ class User(db.Model, UserMixin):
     posts = db.relationship('Post')
     messages = db.relationship('Message', backref='user', lazy=True)
     user_room = db.relationship('Room', secondary=user_room, lazy='subquery', backref=db.backref('rooms', lazy=True))
-    follower_followee = db.relationship('User', secondary=follower_followee, lazy='subquery', backref=db.backref('user', lazy=True))
+    follower_followee = db.relationship(
+        'User', secondary=follower_followee,
+        primaryjoin=(follower_followee.c.follower_id == id),
+        secondaryjoin=(follower_followee.c.followee_id == id),
+        backref=db.backref('followers', lazy='dynamic'), lazy='dynamic')
     image = db.relationship('Image', backref='user', lazy=True)
+
+    def follow(self, user):
+        if not self.is_following(user):
+            self.follower_followee.append(user)
+
+    def unfollow(self, user):
+        if self.is_following(user):
+            self.follower_followee.remove(user)
+
+    def is_following(self, user):
+        return self.follower_followee.filter(
+            follower_followee.c.follower_id == user.id).count() > 0
+
 
 class Room(db.Model):
     __tablename__ = 'room'
@@ -59,6 +75,7 @@ class Post(db.Model):
     creation_date = db.Column(db.DateTime(timezone=True), default=func.now())
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     image = db.relationship('Image', backref='post', lazy=True)
+
 
 class Image(db.Model):
     __tablename__ = 'image'

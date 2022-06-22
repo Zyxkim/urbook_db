@@ -34,14 +34,17 @@
 
                 <ul class="navbar-nav flex-column text-left">
                     <li class="nav-item active">
-                        <a class="nav-link" href="/"><i class="fas fa-home fa-fw mr-2"></i>Stories</a>
+                        <a class="nav-link" href="/"><i class="fas fa-book fa-fw mr-2"></i>Stories</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="blog-post.html"><i
-                                class="fas fa-bookmark fa-fw mr-2"></i>Characters</a>
+                                class="fas fa-person fa-fw mr-2"></i>Characters</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="about.html"><i class="fas fa-user fa-fw mr-2"></i>Rooms</a>
+                        <a class="nav-link" href="about.html"><i class="fas fa-comment-dots fa-fw mr-2"></i>Rooms</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/follows"><i class="fas fa-users mr-2"></i>Follows</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="about.html"><i class="fas fa-cog fa-fw mr-2"></i>Settings</a>
@@ -65,8 +68,62 @@
                                placeholder="Search...">
                     </div>
                     <button type="submit" class="btn btn-outline-primary mr-1"><i class="fas fa-search"></i></button>
-                    <button onclick="location.href = '/create_post';" type="button" class="btn btn-outline-primary"><i class="fas fa-plus"></i></button>
+                    <button type="button" class="btn btn-primary" data-toggle="modal"
+                            data-target="#exampleModalScrollable">
+                        <i class="fas fa-plus"></i>
+                        New Post
+                    </button>
                 </form>
+                <div class="modal fade" id="exampleModalScrollable" tabindex="-1" role="dialog"
+                     aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-scrollable" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalScrollableTitle">Let's create new story!</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <section class="blog-list px-3 py-5 p-md-4">
+                                    <div class="container">
+                                        <form method="POST">
+                                            <div class="row mb-2">
+                                                <div class="col">
+                                                    <div class="form-outline">
+                                                        <input type="text" id="name" name="name" class="form-control"/>
+                                                        <label class="form-label" for="name">Name</label>
+                                                    </div>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="form-outline">
+                                                        <input type="text" id="fandom" name="fandom"
+                                                               class="form-control"/>
+                                                        <label class="form-label" for="fandom">Fandom</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-outline mb-2">
+                                                <textarea class="form-control" name="description" id="description"
+                                                          rows="2"></textarea>
+                                                <label class="form-label" for="description">Description</label>
+                                            </div>
+
+                                            <div class="form-outline mb-2">
+                                                <textarea class="form-control" name="content" id="content"
+                                                          rows="4"></textarea>
+                                                <label class="form-label" for="content">Story</label>
+                                            </div>
+
+                                            <button class="btn btn-primary btn-block">Save</button>
+                                        </form>
+                                    </div>
+                                </section>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
         <section class="blog-list px-3 py-5 p-md-5">

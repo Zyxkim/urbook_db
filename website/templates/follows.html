@@ -1,0 +1,134 @@
+{% extends "base.html" %} {% block title %}Home{% endblock %} {% block content %}
+    <header class="header text-center static_gradient_bg">
+        <ul class="circles">
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+        <nav class="navbar navbar-expand-lg navbar-dark">
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation"
+                    aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div id="navigation" class="collapse navbar-collapse flex-column">
+                <div class="profile-section pt-3 pt-lg-0">
+                    <img class="profile-image rounded-circle mx-auto"
+                         style="width: 150px; height: 150px"
+                         src="/static/images/3.png" alt="image">
+                    <h1 class="blog-name pt-lg-4 mb-0">
+                        {{ user.nickname }}
+                    </h1>
+                    <div class="bio mb-3">{{ user.status }}</div>
+
+                    <hr>
+                </div>
+
+                <ul class="navbar-nav flex-column text-left">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/"><i class="fas fa-book fa-fw mr-2"></i>Stories</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="blog-post.html"><i
+                                class="fas fa-person fa-fw mr-2"></i>Characters</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="about.html"><i class="fas fa-comment-dots fa-fw mr-2"></i>Rooms</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/follows"><i class="fas fa-users mr-2"></i>Follows</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="about.html"><i class="fas fa-cog fa-fw mr-2"></i>Settings</a>
+                    </li>
+                </ul>
+
+                <div class="my-2 my-md-3">
+                    <a class="btn btn-primary" href="/logout" target="_blank">Log Out</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="main-wrapper">
+        <section class="cta-section theme-bg-light py-5">
+            <div class="container text-center">
+                <h2 class="heading">Search user</h2>
+                <form class="signup-form form-inline justify-content-center pt-3">
+                    <div class="form-group">
+                        <input type="text" id="text" name="text" class="form-control mr-md-1 semail"
+                               placeholder="Search...">
+                    </div>
+                    <button type="submit" class="btn btn-outline-primary mr-1"><i class="fas fa-search"></i></button>
+                </form>
+            </div>
+        </section>
+        <section class="blog-list">
+            <div class="block">
+                <div class="row">
+                    <div class="col-sm">
+                        <div class="container mt-2">
+                            <div class="d-flex justify-content-center row">
+                                <div class="col-md-6">
+                                    <div class="p-1 bg-white text-center">
+                                        <h5>Follows</h5>
+
+                                        {% for follow in user.follower_followee %}
+                                        <div class="d-flex flex-row justify-content-between align-items-center">
+                                            <div class="d-flex flex-row align-items-center">
+                                                <img class="rounded-circle" src="https://i.imgur.com/KmT515u.jpg"
+                                                     width="55">
+                                                <div class="d-flex flex-column align-items-start ml-2"><span
+                                                        class="font-weight-bold"> {{ follow.nickname }}</span>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex flex-row align-items-center mt-2">
+                                                <button class="btn btn-outline-primary btn-sm" type="button">Unfollow
+                                                </button>
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm">
+                        <div class="container mt-2">
+                            <div class="d-flex justify-content-center row">
+                                <div class="col-md-6">
+                                    <div class="p-1 bg-white text-center">
+                                        <h5>Followers</h5>
+                                        <div class="d-flex flex-row justify-content-between align-items-center">
+                                            <div class="d-flex flex-row align-items-center">
+                                                <img class="rounded-circle" src="https://i.imgur.com/KmT515u.jpg"
+                                                     width="55">
+                                                <div class="d-flex flex-column align-items-start ml-2"><span
+                                                        class="font-weight-bold">Bella Thorne</span>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex flex-row align-items-center mt-2">
+                                                <button class="btn btn-outline-primary btn-sm" type="button">Follow
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+{% endblock %}
