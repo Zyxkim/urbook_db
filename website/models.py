@@ -66,6 +66,14 @@ class Room(db.Model):
     messages = db.relationship('Message', backref='room', lazy=True)
     image = db.relationship('Image', backref='room', lazy=True)
 
+    @staticmethod
+    def get(id=None, name=None):
+        if id:
+            return Room.query.get(id)
+        if name:
+            return Room.query.filter_by(name=name).first()
+        return Room.query.all()
+
 
 class Message(db.Model):
     __tablename__ = 'message'
@@ -74,6 +82,14 @@ class Message(db.Model):
     creation_date = db.Column(db.DateTime(timezone=True), default=func.now())
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     room_id = db.Column(db.Integer, db.ForeignKey('room.id'), nullable=False)
+
+    @staticmethod
+    def get(user_id=None, room_id=None):
+        if user_id:
+            return Message.query.filter_by(user_id=user_id).all()
+        if room_id:
+            return Message.query.filter_by(room_id=room_id).all()
+        return Message.query.all()
 
 
 class Post(db.Model):

@@ -92,7 +92,7 @@ def rooms():
     all_rooms = db.session.query(user_room).filter_by(user_id=current_user.id).all()
     d, a = {}, []
     for elem in all_rooms:
-        room = Room.query.filter_by(id=elem.room_id).first()
+        room = Room.get(elem.room_id, None)
         a.append(room)
     return render_template("rooms.html", user=current_user, rooms=a)
 
@@ -120,8 +120,8 @@ def get_user_rooms():
 @views.route('/get_room_messages', methods=['GET'])
 def get_room_messages():
     room_id = request.args.get('id')
-    all_messages = Message.query.filter_by(room_id=room_id).all()
-    room_name = Room.query.filter_by(id=room_id).first().name
+    all_messages = Message.get(None, room_id)
+    room_name = Room.get(room_id, None).name
     d, a = {}, []
     for message in all_messages:
         d = {
