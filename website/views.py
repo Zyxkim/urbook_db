@@ -23,7 +23,13 @@ def home():
             db.session.add(new_post)
             db.session.commit()
             flash('Post added!', category='success')
-    return render_template("home.html", user=current_user)
+
+    post_name = request.args.get('text')
+    if post_name:
+        posts = Post.query.filter_by(name=post_name, user_id=current_user.id).all()
+        return render_template("home.html", user=current_user, posts=posts)
+    else:
+        return render_template("home.html", user=current_user, posts=current_user.posts)
 
 @views.route('/delete_post', methods=['GET'])
 def delete_post():
