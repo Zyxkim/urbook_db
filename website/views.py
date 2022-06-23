@@ -31,6 +31,7 @@ def home():
     else:
         return render_template("home.html", user=current_user, posts=current_user.posts)
 
+
 @views.route('/delete_post', methods=['GET'])
 def delete_post():
     post_id = request.args.get('id')
@@ -89,11 +90,15 @@ def rooms():
                 db.session.commit()
                 flash('Message sent!', category='success')
 
-    all_rooms = db.session.query(user_room).filter_by(user_id=current_user.id).all()
-    d, a = {}, []
-    for elem in all_rooms:
-        room = Room.get(elem.room_id, None)
-        a.append(room)
+    room_name = request.args.get('text')
+    if room_name:
+        a = Room.query.filter_by(name=room_name).all()
+    else:
+        all_rooms = db.session.query(user_room).filter_by(user_id=current_user.id).all()
+        d, a = {}, []
+        for elem in all_rooms:
+            room = Room.get(elem.room_id, None)
+            a.append(room)
     return render_template("rooms.html", user=current_user, rooms=a)
 
 
@@ -125,30 +130,19 @@ def create_room():
     return render_template("rooms.html", user=current_user, rooms=a)
 
 
-@views.route('/rooms/<room>/<nickname>', methods=['GET', 'POST'])
-@login_required
-def join(room, nickname):
-    user_room = User.query.filter_by(nickname=nickname).first()
-    current_user.join_room(user_room)
-    db.session.commit()
-
-
-'''@views.route('/get_user_rooms', methods=['GET'])
-def get_user_rooms():
-    all_rooms = db.engine.execute("SELECT * FROM user_room where user_id=%s", (current_user.id))
-    d, a = {}, []
-    for elem in all_rooms:
-        room = db.engine.execute("SELECT * FROM room where id=%s", (elem.room_id))
-        for rowproxy in room:
-            for column, value in rowproxy.items():
-                d = {**d, **{column: value}}
-        a.append(d)
-    return {'data': a}'''
-
-
 @views.route('/get_room_messages', methods=['GET'])
 def get_room_messages():
     room_id = request.args.get('id')
+    in_room = db.session.query(user_room).filter_by(user_id=current_user.id, room_id=room_id).first()
+    if not in_room:
+        d = {
+            'user_id': current_user.id,
+            'room_id': room_id,
+            'role': 'user'
+        }
+        db.session.execute(user_room.insert(), params=d, )
+        db.session.commit()
+
     all_messages = Message.get(None, room_id)
     room_name = Room.get(room_id, None).name
     d, a = {}, []
