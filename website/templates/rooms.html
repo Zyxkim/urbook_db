@@ -36,10 +36,6 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/"><i class="fas fa-book fa-fw mr-2"></i>Stories</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="blog-post.html"><i
-                                class="fas fa-person fa-fw mr-2"></i>Characters</a>
-                    </li>
                     <li class="nav-item active">
                         <a class="nav-link" href="/rooms"><i class="fas fa-comment-dots fa-fw mr-2"></i>Rooms</a>
                     </li>
@@ -146,6 +142,8 @@
                         </div>
                         <div class="flex-grow-1 pl-3" id="room-name">
                         </div>
+                        <div style="margin-right: 20px" id="chat-btn">
+                        </div>
                     </div>
                 </div>
 
@@ -185,6 +183,27 @@
             }
         }
 
+        $(window).on('load', function () {
+            const urlParams = new URLSearchParams(window.location.search);
+            const id = urlParams.get('id');
+            $.ajax({
+                type: "get",
+                url: "/get_role?id=" + id,
+                success: function (data) {
+                    console.log(data.role)
+                    $("#chat-btn").empty()
+                    if (data.role == "admin") {
+                        $("#chat-btn").append(
+                            '<button id="leave" type=\"button\" class=\"btn btn-primary px-3\"><i class=\"fab fa-search\" aria-hidden=\"true\"></i></button>'
+                        )
+                    } else {
+                        $("#chat-btn").append(
+                            '<button id="leave" type=\"button\" class=\"btn btn-primary px-3\"><i class=\"fab fa-android\" aria-hidden=\"true\"></i></button>'
+                        )
+                    }
+                }
+            });
+        });
         setInterval(function () {
             const urlParams = new URLSearchParams(window.location.search);
             const id = urlParams.get('id');
@@ -196,6 +215,7 @@
                     success: function (data) {
                         $("#chat-history").empty();
                         $("#room-name").empty();
+
                         $("#room-name").append('<strong>' + data.room_name + '</strong>');
                         data.data.forEach((x, i) => {
                             let chat_class = 'chat-message-left'

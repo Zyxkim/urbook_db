@@ -176,7 +176,7 @@ div.content {
 .chat-messages {
     display: flex;
     flex-direction: column;
-    max-height: calc(100vh - 130px);
+    max-height: calc(100vh - 150px);
     overflow-y: scroll
 }
 

@@ -157,3 +157,10 @@ def get_room_messages():
         }
         a.append(d)
     return {'data': a, 'current_user': current_user.id, 'room_name': room_name}
+
+
+@views.route('/get_role', methods=['GET'])
+def get_role():
+    room_id = request.args.get('id')
+    in_room = db.session.query(user_room).filter_by(user_id=current_user.id, room_id=room_id).first()
+    return {'role': in_room.role}
