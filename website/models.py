@@ -50,12 +50,6 @@ class User(db.Model, UserMixin):
         return self.follower_followee.filter(
             follower_followee.c.follower_id == user.id).count() > 0
 
-    def join_room(self, user, room):
-        self.user_room.append(user, room, "user")
-
-    def get_rooms(self):
-        return self.user_room
-
 
 class Room(db.Model):
     __tablename__ = 'room'

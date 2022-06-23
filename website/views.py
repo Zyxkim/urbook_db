@@ -26,19 +26,6 @@ def home():
     return render_template("home.html", user=current_user)
 
 
-@views.route('/delete-note', methods=['POST'])
-def delete_note():
-    note = json.loads(request.data)
-    noteId = note['noteId']
-    note = Note.query.get(noteId)
-    if note:
-        if note.user_id == current_user.id:
-            db.session.delete(note)
-            db.session.commit()
-
-    return jsonify({})
-
-
 @views.route('/follows', methods=['GET', 'POST'])
 def follows():
     follows = db.session.query(follower_followee).filter_by(follower_id=current_user.id).all()
@@ -97,6 +84,34 @@ def rooms():
     return render_template("rooms.html", user=current_user, rooms=a)
 
 
+@views.route('/create_room', methods=['POST'])
+def create_room():
+    if request.method == 'POST':
+        name = request.form.get('name')
+        description = request.form.get('description')
+
+        if len(name) < 1:
+            flash('Name is too short!', category='error')
+        else:
+            new_room = Room(name=name, description=description)
+            db.session.add(new_room)
+            d = {
+                'user_id': current_user.id,
+                'room_id': new_room.id,
+                'role': 'admin'
+            }
+            db.session.execute(user_room.insert(), params=d, )
+            db.session.commit()
+            flash('Room created!', category='success')
+
+    all_rooms = db.session.query(user_room).filter_by(user_id=current_user.id).all()
+    d, a = {}, []
+    for elem in all_rooms:
+        room = Room.get(elem.room_id, None)
+        a.append(room)
+    return render_template("rooms.html", user=current_user, rooms=a)
+
+
 @views.route('/rooms/<room>/<nickname>', methods=['GET', 'POST'])
 @login_required
 def join(room, nickname):
@@ -117,6 +132,7 @@ def get_user_rooms():
         a.append(d)
     return {'data': a}'''
 
+
 @views.route('/get_room_messages', methods=['GET'])
 def get_room_messages():
     room_id = request.args.get('id')
@@ -134,4 +150,3 @@ def get_room_messages():
         }
         a.append(d)
     return {'data': a, 'current_user': current_user.id, 'room_name': room_name}
-

@@ -66,7 +66,52 @@
                 <div class="px-4 d-none d-md-block">
                     <div class="d-flex align-items-center">
                         <div class="flex-grow-1">
-                            <input type="text" class="form-control my-3" placeholder="Search...">
+                            <form class="signup-form form-inline justify-content-center pt-3">
+                                <button type="submit" class="btn btn-outline-primary mr-1"><i class="fas fa-search"></i>
+                                </button>
+                                <button type="button" class="btn btn-primary" data-toggle="modal"
+                                        data-target="#exampleModalScrollable">
+                                    <i class="fas fa-plus"></i>
+                                    New Room
+                                </button>
+                            </form>
+
+                            <div class="modal fade" id="exampleModalScrollable" tabindex="-1" role="dialog"
+                                 aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalScrollableTitle">Let's create new
+                                                room!</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <section class="blog-list px-3 py-5 p-md-4">
+                                                <div class="container">
+                                                    <form action="/create_room" method="POST">
+                                                        <div class="form-outline">
+                                                            <input type="text" id="name" name="name"
+                                                                   class="form-control"/>
+                                                            <label class="form-label" for="name">Name</label>
+                                                        </div>
+
+                                                        <div class="form-outline mb-2">
+                                                <textarea class="form-control" name="description" id="description"
+                                                          rows="2"></textarea>
+                                                            <label class="form-label"
+                                                                   for="description">Description</label>
+                                                        </div>
+
+                                                        <button class="btn btn-primary btn-block">Save</button>
+                                                    </form>
+                                                </div>
+                                            </section>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
