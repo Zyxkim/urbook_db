@@ -176,8 +176,19 @@ div.content {
 .chat-messages {
     display: flex;
     flex-direction: column;
-    max-height: 800px;
+    max-height: calc(100vh - 130px);
     overflow-y: scroll
+}
+
+.chat-messages ::-webkit-scrollbar {
+    width: 1px;
+}
+
+
+.chat-messages ::-webkit-scrollbar-thumb {
+    margin-left: 100px;
+    background-color: #ffffff;
+    border-radius: 100px;
 }
 
 .chat-message-left,

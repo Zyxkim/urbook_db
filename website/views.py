@@ -41,31 +41,27 @@ def delete_note():
 
 @views.route('/follows', methods=['GET', 'POST'])
 def follows():
-    follows = db.engine.execute("SELECT * FROM follower_followee where follower_id=%s", (current_user.id))
+    follows = db.session.query(follower_followee).filter_by(follower_id=current_user.id).all()
     d, followed_user = {}, []
     for elem in follows:
         followee = User.query.filter_by(id=elem.followee_id).all()
-        print(followee)
         for data in followee:
             d = {
                 'id': data.id,
                 'nickname': data.nickname
             }
         followed_user.append(d)
-    print(followed_user)
 
-    followees = db.engine.execute("SELECT * FROM follower_followee where followee_id=%s", (current_user.id))
+    followees = db.session.query(follower_followee).filter_by(followee_id=current_user.id).all()
     b, followee_user = {}, []
     for elem in followees:
         follower = User.query.filter_by(id=elem.follower_id).all()
-        print(follower)
         for data in follower:
             b = {
                 'id': data.id,
                 'nickname': data.nickname
             }
         followee_user.append(b)
-    print(followee_user)
 
     return render_template("follows.html", user=current_user, followed=followed_user, followers=followee_user)
 
@@ -80,8 +76,25 @@ def follow(nickname):
 
 @views.route('/rooms', methods=['GET', 'POST'])
 def rooms():
-    all_rooms = db.engine.execute("SELECT * FROM room order by creation_date")
-    return render_template("rooms.html", user=current_user, rooms=all_rooms)
+    if request.method == 'POST':
+        room_id = request.args.get('id')
+        if room_id:
+            content = request.form.get('content')
+
+            if len(content) < 1:
+                flash('Content is too short!', category='error')
+            else:
+                new_message = Message(content=content, user_id=current_user.id, room_id=room_id)
+                db.session.add(new_message)
+                db.session.commit()
+                flash('Message sent!', category='success')
+
+    all_rooms = db.session.query(user_room).filter_by(user_id=current_user.id).all()
+    d, a = {}, []
+    for elem in all_rooms:
+        room = Room.query.filter_by(id=elem.room_id).first()
+        a.append(room)
+    return render_template("rooms.html", user=current_user, rooms=a)
 
 
 @views.route('/rooms/<room>/<nickname>', methods=['GET', 'POST'])
@@ -92,16 +105,33 @@ def join(room, nickname):
     db.session.commit()
 
 
-@views.route('/get_user_rooms', methods=['GET'])
-def get_all_rooms():
+'''@views.route('/get_user_rooms', methods=['GET'])
+def get_user_rooms():
     all_rooms = db.engine.execute("SELECT * FROM user_room where user_id=%s", (current_user.id))
     d, a = {}, []
     for elem in all_rooms:
         room = db.engine.execute("SELECT * FROM room where id=%s", (elem.room_id))
         for rowproxy in room:
-            print(rowproxy)
-        for column, value in rowproxy.items():
-            d = {**d, **{column: value}, 'role': elem.role}
+            for column, value in rowproxy.items():
+                d = {**d, **{column: value}}
         a.append(d)
-    print(a)
-    return {'data': a}
+    return {'data': a}'''
+
+@views.route('/get_room_messages', methods=['GET'])
+def get_room_messages():
+    room_id = request.args.get('id')
+    all_messages = Message.query.filter_by(room_id=room_id).all()
+    room_name = Room.query.filter_by(id=room_id).first().name
+    d, a = {}, []
+    for message in all_messages:
+        d = {
+            'id': message.id,
+            'content': message.content,
+            'creation_date': message.creation_date,
+            'user_id': message.user_id,
+            'user_nickname': User.query.filter_by(id=message.user_id).first().nickname,
+            'room_id': message.room_id
+        }
+        a.append(d)
+    return {'data': a, 'current_user': current_user.id, 'room_name': room_name}
+
