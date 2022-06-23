@@ -59,98 +59,117 @@
     </header>
 
     <div class="main-wrapper">
-        <section class="cta-section theme-bg-light py-5">
-            <div class="container text-center">
-                <h2 class="heading">Search post</h2>
-                <form class="signup-form form-inline justify-content-center pt-3">
-                    <div class="form-group">
-                        <input type="text" id="text" name="text" class="form-control mr-md-1 semail"
-                               placeholder="Search...">
-                    </div>
-                    <button type="submit" class="btn btn-outline-primary mr-1"><i class="fas fa-search"></i></button>
-                    <button type="button" class="btn btn-primary" data-toggle="modal"
-                            data-target="#exampleModalScrollable">
-                        <i class="fas fa-plus"></i>
-                        New Post
-                    </button>
-                </form>
-                <div class="modal fade" id="exampleModalScrollable" tabindex="-1" role="dialog"
-                     aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-scrollable" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalScrollableTitle">Let's create new story!</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <section class="blog-list px-3 py-5 p-md-4">
-                                    <div class="container">
-                                        <form method="POST">
-                                            <div class="row mb-2">
-                                                <div class="col">
-                                                    <div class="form-outline">
-                                                        <input type="text" id="name" name="name" class="form-control"/>
-                                                        <label class="form-label" for="name">Name</label>
-                                                    </div>
-                                                </div>
-                                                <div class="col">
-                                                    <div class="form-outline">
-                                                        <input type="text" id="fandom" name="fandom"
-                                                               class="form-control"/>
-                                                        <label class="form-label" for="fandom">Fandom</label>
-                                                    </div>
+    <section class="cta-section theme-bg-light py-5">
+        <div class="container text-center">
+            <h2 class="heading">Search post</h2>
+            <form class="signup-form form-inline justify-content-center pt-3">
+                <div class="form-group">
+                    <input type="text" id="text" name="text" class="form-control mr-md-1 semail"
+                           placeholder="Search...">
+                </div>
+                <button type="submit" class="btn btn-outline-primary mr-1"><i class="fas fa-search"></i></button>
+                <button type="button" class="btn btn-primary" data-toggle="modal"
+                        data-target="#exampleModalScrollable">
+                    <i class="fas fa-plus"></i>
+                    New Post
+                </button>
+            </form>
+            <div class="modal fade" id="exampleModalScrollable" tabindex="-1" role="dialog"
+                 aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-scrollable" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalScrollableTitle">Let's create new story!</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <section class="blog-list px-3 py-5 p-md-4">
+                                <div class="container">
+                                    <form method="POST">
+                                        <div class="row mb-2">
+                                            <div class="col">
+                                                <div class="form-outline">
+                                                    <input type="text" id="name" name="name" class="form-control"/>
+                                                    <label class="form-label" for="name">Name</label>
                                                 </div>
                                             </div>
+                                            <div class="col">
+                                                <div class="form-outline">
+                                                    <input type="text" id="fandom" name="fandom"
+                                                           class="form-control"/>
+                                                    <label class="form-label" for="fandom">Fandom</label>
+                                                </div>
+                                            </div>
+                                        </div>
 
-                                            <div class="form-outline mb-2">
+                                        <div class="form-outline mb-2">
                                                 <textarea class="form-control" name="description" id="description"
                                                           rows="2"></textarea>
-                                                <label class="form-label" for="description">Description</label>
-                                            </div>
+                                            <label class="form-label" for="description">Description</label>
+                                        </div>
 
-                                            <div class="form-outline mb-2">
+                                        <div class="form-outline mb-2">
                                                 <textarea class="form-control" name="content" id="content"
                                                           rows="4"></textarea>
-                                                <label class="form-label" for="content">Story</label>
-                                            </div>
+                                            <label class="form-label" for="content">Story</label>
+                                        </div>
 
-                                            <button class="btn btn-primary btn-block">Save</button>
-                                        </form>
-                                    </div>
-                                </section>
-                            </div>
+                                        <button class="btn btn-primary btn-block">Save</button>
+                                    </form>
+                                </div>
+                            </section>
                         </div>
                     </div>
                 </div>
             </div>
-        </section>
-        <section class="blog-list px-3 py-5 p-md-5">
-            <div class="container">
+        </div>
+    </section>
+    <section class="blog-list px-3 py-5 p-md-5">
+
+    <div class="card border-0 px-3 pt-3">
+    <div>
+        <section class="text-center">
+            <div class="row">
+
                 {% for post in user.posts %}
-                    <div class="item mb-5">
-                        <div class="media">
-                            <div class="media-body">
-                                <h3 class="title mb-1">
-                                    <a href="blog-post.html">
-                                        {{ post.name }}
-                                    </a>
-                                </h3>
-                                <div class="meta mb-1">
-                                    <span class="date">
-                                    {{ post.creation_date }}
-                                    </span>
-                                    <span class="readers">
-                                        <a href="#">
-                                            0 readers
-                                        </a>
-                                    </span>
+                    <div class="col-lg-4 col-md-12 mb-4">
+                        <div class="card">
+                            <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
+                                <img src="https://mdbootstrap.com/img/new/standard/nature/184.jpg"
+                                     class="img-fluid"/>
+                                <div class="card-img-overlay">
+                                    <button type="button"
+                                            class="btn-close btn-close-white" id="delete-{{ post.id }}"
+                                            style="margin-left: 95%"
+                                            aria-label="Delete"></button>
+                                    <script>
+                                        $("#delete-{{ post.id }}").click(function () {
+                                            $.ajax({
+                                                type: "get",
+                                                url: "/delete_post?id=" + {{ post.id }},
+                                                success: function (data) {
+                                                }
+                                            });
+                                            window.location = "/";
+                                        });
+                                    </script>
                                 </div>
-                                <div class="intro">
-                                    {{ post.description }}
-                                </div>
-                                <a class="more-link" href="blog-post.html">Read more &rarr;</a>
+                                <a href="#!">
+                                    <div class="mask"
+                                         style="background-color: rgba(251, 251, 251, 0.15);"></div>
+                                </a>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title"> {{ post.name }} </h5>
+                                <p class="card-text">
+                                    {{ post.description[:50] + "..." }}
+                                </p>
+                                <a href="#!" class="btn btn-primary">Read</a>
+                            </div>
+                            <div class="card-footer">
+                                <small class="text-muted">{{ post.creation_date }}</small>
                             </div>
                         </div>
                     </div>

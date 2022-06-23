@@ -25,6 +25,13 @@ def home():
             flash('Post added!', category='success')
     return render_template("home.html", user=current_user)
 
+@views.route('/delete_post', methods=['GET'])
+def delete_post():
+    post_id = request.args.get('id')
+    Post.query.filter_by(id=post_id).delete()
+    db.session.commit()
+    return render_template("home.html", user=current_user)
+
 
 @views.route('/follows', methods=['GET', 'POST'])
 def follows():
