@@ -52,7 +52,7 @@
             <div class="profile-section pt-3 pt-lg-4">
                 <img class="profile-image rounded-circle mx-auto"
                      style="width: 150px; height: 150px"
-                     src="https://mdbootstrap.com/img/new/standard/nature/184.jpg" alt="image">
+                     src="{{ image_path }}" alt="image">
                 <h1 class="blog-name pt-lg-1 mb-0">
                     {{ user.nickname }}
                 </h1>
@@ -116,7 +116,7 @@
                 <div class="row overflow-auto flex-row flex-nowrap">
                     {% for follow in followed %}
                         <div class="col-1">
-                            <img src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"
+                            <img src="{{ follow.image_path }}"
                                  class="rounded-circle" style="width: 50px; height: 50px"
                                  alt="Avatar"
                                  onclick="window.open('/user?id={{ follow.id }}')"/>
@@ -131,7 +131,7 @@
                 <div class="row overflow-auto flex-row flex-nowrap">
                     {% for follow in followers %}
                         <div class="col-1">
-                            <img src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"
+                            <img src="{{ follow.image_path }}"
                                  class="rounded-circle" style="width: 50px; height: 50px"
                                  alt="Avatar"
                                  onclick="window.open('/user?id={{ follow.id }}')"
@@ -181,7 +181,7 @@
                                              style="background-color: rgba(251, 251, 251, 0.15);"></div>
                                     </a>
                                 </div>
-                                <div class="card-body" style="width: 100%">
+                                <div class="card-body card-body-custom" style="width: 100%">
                                     <h5 class="card-title"> {{ post.name }} </h5>
                                     <p class="card-text">
                                         {{ post.description[:150] + "..." }}

@@ -35,9 +35,15 @@ def home():
     for elem in follows:
         followee = User.query.filter_by(id=elem.followee_id).all()
         for data in followee:
+            image = Image.query.filter_by(user_id=data.id).first()
+            if image:
+                image_path = image.path
+            else:
+                image_path = 'https://catherineasquithgallery.com/uploads/posts/2021-02/1614507972_15-p-yarko-belii-fon-24.jpg'
             d = {
                 'id': data.id,
-                'nickname': data.nickname
+                'nickname': data.nickname,
+                'image_path': image_path
             }
         followed_user.append(d)
 
@@ -46,9 +52,15 @@ def home():
     for elem in followees:
         follower = User.query.filter_by(id=elem.follower_id).all()
         for data in follower:
+            image = Image.query.filter_by(user_id=data.id).first()
+            if image:
+                image_path = image.path
+            else:
+                image_path = 'https://catherineasquithgallery.com/uploads/posts/2021-02/1614507972_15-p-yarko-belii-fon-24.jpg'
             b = {
                 'id': data.id,
-                'nickname': data.nickname
+                'nickname': data.nickname,
+                'image_path': image_path
             }
         followee_user.append(b)
 
@@ -82,9 +94,15 @@ def follows():
     for elem in follows:
         followee = User.query.filter_by(id=elem.followee_id).all()
         for data in followee:
+            image = Image.query.filter_by(user_id=data.id).first()
+            if image:
+                image_path = image.path
+            else:
+                image_path = 'https://catherineasquithgallery.com/uploads/posts/2021-02/1614507972_15-p-yarko-belii-fon-24.jpg'
             d = {
                 'id': data.id,
-                'nickname': data.nickname
+                'nickname': data.nickname,
+                'image_path': image_path
             }
         followed_user.append(d)
 
@@ -93,9 +111,15 @@ def follows():
     for elem in followees:
         follower = User.query.filter_by(id=elem.follower_id).all()
         for data in follower:
+            image = Image.query.filter_by(user_id=data.id).first()
+            if image:
+                image_path = image.path
+            else:
+                image_path = 'https://catherineasquithgallery.com/uploads/posts/2021-02/1614507972_15-p-yarko-belii-fon-24.jpg'
             b = {
                 'id': data.id,
-                'nickname': data.nickname
+                'nickname': data.nickname,
+                'image_path': image_path
             }
         followee_user.append(b)
 
@@ -105,6 +129,7 @@ def follows():
 @views.route('/rooms', methods=['GET', 'POST'])
 def rooms():
     room_id = request.args.get('id')
+    image_path = 'https://catherineasquithgallery.com/uploads/posts/2021-02/1614507972_15-p-yarko-belii-fon-24.jpg'
     if request.method == 'POST':
         if room_id:
             content = request.form.get('content')
@@ -279,14 +304,21 @@ def leave_room():
 @login_required
 def user():
     user_id = request.args.get('id')
+    user = User.query.filter_by(id=user_id).first()
     follows = db.session.query(follower_followee).filter_by(follower_id=user_id).all()
     d, followed_user = {}, []
     for elem in follows:
         followee = User.query.filter_by(id=elem.followee_id).all()
         for data in followee:
+            image = Image.query.filter_by(user_id=data.id).first()
+            if image:
+                image_path = image.path
+            else:
+                image_path = 'https://catherineasquithgallery.com/uploads/posts/2021-02/1614507972_15-p-yarko-belii-fon-24.jpg'
             d = {
                 'id': data.id,
-                'nickname': data.nickname
+                'nickname': data.nickname,
+                'image_path': image_path
             }
         followed_user.append(d)
 
@@ -295,9 +327,15 @@ def user():
     for elem in followees:
         follower = User.query.filter_by(id=elem.follower_id).all()
         for data in follower:
+            image = Image.query.filter_by(user_id=data.id).first()
+            if image:
+                image_path = image.path
+            else:
+                image_path = 'https://catherineasquithgallery.com/uploads/posts/2021-02/1614507972_15-p-yarko-belii-fon-24.jpg'
             b = {
                 'id': data.id,
-                'nickname': data.nickname
+                'nickname': data.nickname,
+                'image_path': image_path
             }
         followee_user.append(b)
 
@@ -308,15 +346,20 @@ def user():
     else:
         is_following = 0
 
+    image = Image.query.filter_by(user_id=user_id).first()
+    image_path = 'https://catherineasquithgallery.com/uploads/posts/2021-02/1614507972_15-p-yarko-belii-fon-24.jpg'
+    if image:
+        image_path = image.path
+
     post_name = request.args.get('text')
     if post_name:
         posts = Post.query.filter_by(name=post_name, user_id=user_id).all()
-        return render_template("user.html", user=current_user, posts=posts, followed=followed_user,
-                               followers=followee_user, is_following=is_following)
+        return render_template("user.html", user=user, posts=posts, followed=followed_user,
+                               followers=followee_user, is_following=is_following, image_path=image_path)
     else:
         posts = Post.query.filter_by(user_id=user_id).all()
-        return render_template("user.html", user=current_user, posts=posts, followed=followed_user,
-                               followers=followee_user, is_following=is_following)
+        return render_template("user.html", user=user, posts=posts, followed=followed_user,
+                               followers=followee_user, is_following=is_following, image_path=image_path)
 
 
 @views.route('/follow', methods=['GET', 'POST'])

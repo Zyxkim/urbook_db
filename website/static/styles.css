@@ -261,7 +261,7 @@ div.content {
     width: 100%;
 }
 
-.card-body {
+.card-body-custom {
     height: 200px;
     width: 200px;
     margin-right: 5px;
