@@ -194,12 +194,30 @@
                     $("#chat-btn").empty()
                     if (data.role == "admin") {
                         $("#chat-btn").append(
-                            '<button id="leave" type=\"button\" class=\"btn btn-primary px-3\"><i class=\"fab fa-search\" aria-hidden=\"true\"></i></button>'
-                        )
+                            '<button id=\"delete-' + id + '\" type=\"button\" class=\"btn btn-primary px-3\"><i class=\"fab fa-search\" aria-hidden=\"true\"></i></button>'
+                        );
+                        $("#delete-" + id).click(function () {
+                            $.ajax({
+                                type: "get",
+                                url: "/delete_room?id=" + id,
+                                success: function (data) {
+                                    window.location = "/rooms";
+                                }
+                            });
+                        });
                     } else {
                         $("#chat-btn").append(
-                            '<button id="leave" type=\"button\" class=\"btn btn-primary px-3\"><i class=\"fab fa-android\" aria-hidden=\"true\"></i></button>'
-                        )
+                            '<button id=\"leave-' + id + '\" type=\"button\" class=\"btn btn-primary px-3\"><i class=\"fab fa-android\" aria-hidden=\"true\"></i></button>'
+                        );
+                        $("#leave-" + id).click(function () {
+                            $.ajax({
+                                type: "get",
+                                url: "/leave_room?id=" + id,
+                                success: function (data) {
+                                    window.location = "/rooms";
+                                }
+                            });
+                        });
                     }
                 }
             });

@@ -164,3 +164,21 @@ def get_role():
     room_id = request.args.get('id')
     in_room = db.session.query(user_room).filter_by(user_id=current_user.id, room_id=room_id).first()
     return {'role': in_room.role}
+
+@views.route('/delete_room', methods=['GET'])
+def delete_room():
+    room_id = request.args.get('id')
+    room = Room.query.get(room_id)
+    db.session.query(user_room).filter_by(user_id=current_user.id, room_id=room_id).delete()
+    Message.query.filter_by(room_id=room_id, user_id=current_user.id).delete()
+    db.session.delete(room)
+    db.session.commit()
+    return {'SATUS': 'OK'}
+
+
+@views.route('/leave_room', methods=['GET'])
+def leave_room():
+    room_id = request.args.get('id')
+    db.session.query(user_room).filter_by(user_id=current_user.id, room_id=room_id).delete()
+    db.session.commit()
+    return {'SATUS': 'OK'}
