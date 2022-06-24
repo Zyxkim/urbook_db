@@ -94,7 +94,7 @@ class Post(db.Model):
     content = db.Column(db.Text, nullable=False)
     creation_date = db.Column(db.DateTime(timezone=True), default=func.now())
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    image = db.relationship('Image', backref='post', lazy=True)
+    image = db.relationship('Image', backref='post', passive_deletes='all')
 
 
 class Image(db.Model):
@@ -103,7 +103,7 @@ class Image(db.Model):
     path = db.Column(db.String(255), unique=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
     room_id = db.Column(db.Integer, db.ForeignKey('room.id'), nullable=True)
-    post_id = db.Column(db.Integer, db.ForeignKey('post.id'), nullable=True)
+    post_id = db.Column(db.Integer, db.ForeignKey('post.id', ondelete='CASCADE'), nullable=True)
     message_id = db.Column(db.Integer, db.ForeignKey('message.id'), nullable=True)
 
     @staticmethod
