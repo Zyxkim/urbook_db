@@ -1,5 +1,7 @@
-from flask import Blueprint, render_template, request, flash, jsonify
-from flask_login import login_required, current_user
+from flask import Blueprint, render_template, request, flash, jsonify, redirect, url_for
+from flask_login import login_required, current_user, login_user
+from werkzeug.security import check_password_hash, generate_password_hash
+
 from .models import *
 from . import db
 import json
@@ -49,9 +51,11 @@ def home():
     post_name = request.args.get('text')
     if post_name:
         posts = Post.query.filter_by(name=post_name, user_id=current_user.id).all()
-        return render_template("home.html", user=current_user, posts=posts, followed=followed_user, followers=followee_user)
+        return render_template("home.html", user=current_user, posts=posts, followed=followed_user,
+                               followers=followee_user)
     else:
-        return render_template("home.html", user=current_user, posts=current_user.posts, followed=followed_user, followers=followee_user)
+        return render_template("home.html", user=current_user, posts=current_user.posts, followed=followed_user,
+                               followers=followee_user)
 
 
 @views.route('/delete_post', methods=['GET'])
@@ -87,6 +91,7 @@ def follows():
         followee_user.append(b)
 
     return render_template("follows.html", user=current_user, followed=followed_user, followers=followee_user)
+
 
 @views.route('/rooms', methods=['GET', 'POST'])
 def rooms():
@@ -178,6 +183,7 @@ def get_role():
     in_room = db.session.query(user_room).filter_by(user_id=current_user.id, room_id=room_id).first()
     return {'role': in_room.role}
 
+
 @views.route('/delete_room', methods=['GET'])
 def delete_room():
     room_id = request.args.get('id')
@@ -195,6 +201,7 @@ def leave_room():
     db.session.query(user_room).filter_by(user_id=current_user.id, room_id=room_id).delete()
     db.session.commit()
     return {'SATUS': 'OK'}
+
 
 @views.route('/user', methods=['GET', 'POST'])
 @login_required
@@ -222,7 +229,8 @@ def user():
             }
         followee_user.append(b)
 
-    is_following = db.session.query(follower_followee).filter_by(follower_id=current_user.id, followee_id=user_id).first()
+    is_following = db.session.query(follower_followee).filter_by(follower_id=current_user.id,
+                                                                 followee_id=user_id).first()
     if is_following:
         is_following = 1
     else:
@@ -231,10 +239,13 @@ def user():
     post_name = request.args.get('text')
     if post_name:
         posts = Post.query.filter_by(name=post_name, user_id=user_id).all()
-        return render_template("user.html", user=current_user, posts=posts, followed=followed_user, followers=followee_user, is_following=is_following)
+        return render_template("user.html", user=current_user, posts=posts, followed=followed_user,
+                               followers=followee_user, is_following=is_following)
     else:
         posts = Post.query.filter_by(user_id=user_id).all()
-        return render_template("user.html", user=current_user, posts=posts, followed=followed_user, followers=followee_user, is_following=is_following)
+        return render_template("user.html", user=current_user, posts=posts, followed=followed_user,
+                               followers=followee_user, is_following=is_following)
+
 
 @views.route('/follow', methods=['GET', 'POST'])
 @login_required
@@ -245,6 +256,7 @@ def follow():
     db.session.commit()
     return {'Status': 'OK'}
 
+
 @views.route('/unfollow', methods=['GET', 'POST'])
 @login_required
 def unfollow():
@@ -254,7 +266,51 @@ def unfollow():
     db.session.commit()
     return {'Status': 'OK'}
 
+
 @views.route('/settings', methods=['GET', 'POST'])
 @login_required
 def settings():
+    if request.method == 'POST':
+        email = request.form.get('email')
+        nickname = request.form.get('firstName')
+        status = request.form.get('status')
+        password1 = request.form.get('password1')
+        password2 = request.form.get('password2')
+
+        user = User.query.filter_by(email=email).first()
+        user_nickname = User.query.filter_by(nickname=nickname).first()
+
+        if user:
+            flash('Аккаунт с таким e-mail существует.', category='error')
+        elif email:
+            if len(email) < 4:
+                flash('Минимальная длина e-mail - 4 символа.', category='error')
+            else:
+                current_user.email = email
+                db.session.commit()
+
+
+        if user_nickname:
+            flash('Аккаунт с таким nickname существует.', category='error')
+        elif nickname:
+            if len(nickname) < 2:
+                flash('Минимальная длина ника - 2 символа.', category='error')
+            else:
+                current_user.nickname = nickname
+                db.session.commit()
+
+        if status:
+            current_user.status = status
+            db.session.commit()
+
+        if password1:
+            if len(password1) < 4:
+                flash('Минимальная длина pass - 4 символа.', category='error')
+            elif password1 != password2:
+                flash('Пароли не совпадают.', category='error')
+            else:
+                current_user.password = generate_password_hash(password1, method='sha256')
+                db.session.commit()
+
+    #return redirect(url_for('views.home'))
     return render_template("settings.html", user=current_user)
