@@ -20,18 +20,11 @@
             </button>
 
             <div id="navigation" class="collapse navbar-collapse flex-column">
-                <div class="profile-section pt-3 pt-lg-0">
-                    <img class="profile-image rounded-circle mx-auto"
-                         style="width: 150px; height: 150px"
-                         src="/static/images/3.png" alt="image">
-                    <h1 class="blog-name pt-lg-4 mb-0">
-                        {{ user.nickname }}
-                    </h1>
-                    <div class="bio mb-3">{{ user.status }}</div>
-
-                    <hr>
+                <div style="height: 30vh"></div>
+                <div class="text-center mb-3">
+                    <span style="color: #ffffff; font-size: 30pt; font-weight: bold">Ur</span>
+                    <span style="color: #ffffff; font-size: 30pt; font-weight: bold">Book</span>
                 </div>
-
                 <ul class="navbar-nav flex-column text-left">
                     <li class="nav-item">
                         <a class="nav-link" href="/"><i class="fas fa-book fa-fw mr-2"></i>Stories</a>
@@ -53,6 +46,7 @@
             </div>
         </nav>
     </header>
+
 
     <div class="main-wrapper">
         <section class="cta-section theme-bg-light py-5">
@@ -78,19 +72,20 @@
                                         <h5>Follows</h5>
 
                                         {% for follow in followed %}
-                                        <div class="d-flex flex-row justify-content-between align-items-center">
-                                            <div class="d-flex flex-row align-items-center">
-                                                <img class="rounded-circle" src="https://i.imgur.com/KmT515u.jpg"
-                                                     width="55">
-                                                <div class="d-flex flex-column align-items-start ml-2"><span
-                                                        class="font-weight-bold"> {{ follow.nickname }}</span>
+                                            <div class="d-flex flex-row justify-content-between align-items-center">
+                                                <div class="d-flex flex-row align-items-center">
+                                                    <img class="rounded-circle" src="https://i.imgur.com/KmT515u.jpg"
+                                                         width="55">
+                                                    <div class="d-flex flex-column align-items-start ml-2"><span
+                                                            class="font-weight-bold"> {{ follow.nickname }}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="d-flex flex-row align-items-center mt-2">
+                                                    <button class="btn btn-outline-primary btn-sm" type="button">
+                                                        Unfollow
+                                                    </button>
                                                 </div>
                                             </div>
-                                            <div class="d-flex flex-row align-items-center mt-2">
-                                                <button class="btn btn-outline-primary btn-sm" type="button">Unfollow
-                                                </button>
-                                            </div>
-                                        </div>
                                         {% endfor %}
 
                                     </div>
@@ -105,19 +100,20 @@
                                     <div class="p-1 bg-white text-center">
                                         <h5>Followers</h5>
                                         {% for follow in followers %}
-                                        <div class="d-flex flex-row justify-content-between align-items-center">
-                                            <div class="d-flex flex-row align-items-center">
-                                                <img class="rounded-circle" src="https://i.imgur.com/KmT515u.jpg"
-                                                     width="55">
-                                                <div class="d-flex flex-column align-items-start ml-2"><span
-                                                        class="font-weight-bold"> {{ follow.nickname }}</span>
+                                            <div class="d-flex flex-row justify-content-between align-items-center">
+                                                <div class="d-flex flex-row align-items-center">
+                                                    <img class="rounded-circle" src="https://i.imgur.com/KmT515u.jpg"
+                                                         width="55">
+                                                    <div class="d-flex flex-column align-items-start ml-2"><span
+                                                            class="font-weight-bold"> {{ follow.nickname }}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="d-flex flex-row align-items-center mt-2">
+                                                    <button class="btn btn-outline-primary btn-sm" type="button">
+                                                        Unfollow
+                                                    </button>
                                                 </div>
                                             </div>
-                                            <div class="d-flex flex-row align-items-center mt-2">
-                                                <button class="btn btn-outline-primary btn-sm" type="button">Unfollow
-                                                </button>
-                                            </div>
-                                        </div>
                                         {% endfor %}
                                     </div>
                                 </div>

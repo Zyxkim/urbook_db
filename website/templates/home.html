@@ -20,18 +20,11 @@
             </button>
 
             <div id="navigation" class="collapse navbar-collapse flex-column">
-                <div class="profile-section pt-3 pt-lg-0">
-                    <img class="profile-image rounded-circle mx-auto"
-                         style="width: 150px; height: 150px"
-                         src="/static/images/3.png" alt="image">
-                    <h1 class="blog-name pt-lg-4 mb-0">
-                        {{ user.nickname }}
-                    </h1>
-                    <div class="bio mb-3">{{ user.status }}</div>
-
-                    <hr>
+                <div style="height: 30vh"></div>
+                <div class="text-center mb-3">
+                    <span style="color: #ffffff; font-size: 30pt; font-weight: bold">Ur</span>
+                    <span style="color: #ffffff; font-size: 30pt; font-weight: bold">Book</span>
                 </div>
-
                 <ul class="navbar-nav flex-column text-left">
                     <li class="nav-item active">
                         <a class="nav-link" href="/"><i class="fas fa-book fa-fw mr-2"></i>Stories</a>
@@ -55,6 +48,19 @@
     </header>
 
     <div class="main-wrapper">
+        <div class="container text-center">
+            <div class="profile-section pt-3 pt-lg-0">
+                <img class="profile-image rounded-circle mx-auto"
+                     style="width: 150px; height: 150px"
+                     src="/static/images/3.png" alt="image">
+                <h1 class="blog-name pt-lg-4 mb-0">
+                    {{ user.nickname }}
+                </h1>
+                <div class="bio mb-3">{{ user.status }}</div>
+
+                <hr>
+            </div>
+        </div>
         <section class="cta-section theme-bg-light py-5">
             <div class="container text-center">
                 <h2 class="heading">Search post</h2>
@@ -123,6 +129,7 @@
                 </div>
             </div>
         </section>
+
         <section class="blog-list px-3 py-5 p-md-5">
 
             <div class="card border-0 px-3 pt-3">
