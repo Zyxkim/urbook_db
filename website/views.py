@@ -131,6 +131,7 @@ def rooms():
     room_id = request.args.get('id')
     image_path = 'https://catherineasquithgallery.com/uploads/posts/2021-02/1614507972_15-p-yarko-belii-fon-24.jpg'
     if request.method == 'POST':
+        file = request.files['file']
         if room_id:
             content = request.form.get('content')
 
@@ -140,11 +141,36 @@ def rooms():
                 new_message = Message(content=content, user_id=current_user.id, room_id=room_id)
                 db.session.add(new_message)
                 db.session.commit()
+
+                if file:
+                    filename = str(uuid.uuid4()) + '.jpg'
+                    path = os.path.join(UPLOAD_FOLDER, filename)
+                    image = Image.query.filter_by(message_id=new_message.id).first()
+                    if image:
+                        os.remove(UPLOAD_FOLDER + '\\' + image.path.split('/')[-1])
+                        image.path = DATA_SERVER + filename
+                    else:
+                        new_image = Image(path=DATA_SERVER + filename, message_id=new_message.id)
+                        db.session.add(new_image)
+                    file.save(path)
+                    db.session.commit()
                 flash('Message sent!', category='success')
 
     room_name = request.args.get('text')
     if room_name:
-        a = Room.query.filter_by(name=room_name).all()
+        all_rooms = Room.query.filter_by(name=room_name).all()
+        d, a = {}, []
+        for elem in all_rooms:
+            room = Room.get(elem.id, None)
+            b = room
+
+            image = Image.query.filter_by(room_id=elem.id).first()
+            if image:
+                image_path = image.path
+            else:
+                image_path = 'https://catherineasquithgallery.com/uploads/posts/2021-02/1614507972_15-p-yarko-belii-fon-24.jpg'
+            b.image_path = image_path
+            a.append(b)
     else:
         all_rooms = db.session.query(user_room).filter_by(user_id=current_user.id).all()
         d, a = {}, []
@@ -171,6 +197,7 @@ def rooms():
     else:
         room_name = None
         room_description = None
+        image_path = 'https://catherineasquithgallery.com/uploads/posts/2021-02/1614507972_15-p-yarko-belii-fon-24.jpg'
     return render_template("rooms.html", user=current_user, rooms=a, room_id=room_id, room_name=room_name,
                            room_description=room_description, image_path=image_path)
 
@@ -210,7 +237,7 @@ def create_room():
     for elem in all_rooms:
         room = Room.get(elem.room_id, None)
         a.append(room)
-    return render_template("rooms.html", user=current_user, rooms=a)
+    return redirect(url_for('views.rooms'))
 
 
 @views.route('/edit_room', methods=['GET', 'POST'])
@@ -262,13 +289,19 @@ def get_room_messages():
     room_name = Room.get(room_id, None).name
     d, a = {}, []
     for message in all_messages:
+        image = Image.query.filter_by(message_id=message.id).first()
+        if image:
+            image_path = image.path
+        else:
+            image_path = None
         d = {
             'id': message.id,
             'content': message.content,
             'creation_date': message.creation_date,
             'user_id': message.user_id,
             'user_nickname': User.query.filter_by(id=message.user_id).first().nickname,
-            'room_id': message.room_id
+            'room_id': message.room_id,
+            'image_path': image_path
         }
         a.append(d)
     return {'data': a, 'current_user': current_user.id, 'room_name': room_name}

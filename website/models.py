@@ -74,6 +74,7 @@ class Message(db.Model):
     creation_date = db.Column(db.DateTime(timezone=True), default=func.now())
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     room_id = db.Column(db.Integer, db.ForeignKey('room.id'), nullable=False)
+    image = db.relationship('Image', backref='message', lazy=True)
 
     @staticmethod
     def get(user_id=None, room_id=None):
@@ -103,6 +104,7 @@ class Image(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
     room_id = db.Column(db.Integer, db.ForeignKey('room.id'), nullable=True)
     post_id = db.Column(db.Integer, db.ForeignKey('post.id'), nullable=True)
+    message_id = db.Column(db.Integer, db.ForeignKey('message.id'), nullable=True)
 
     @staticmethod
     def get(id=None, user_id=None, room_id=None, post_id=None):
