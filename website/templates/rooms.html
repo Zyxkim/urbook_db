@@ -65,18 +65,17 @@
                                 </button>
 
                                 <button type="button" class="btn btn-primary" data-toggle="modal"
-                                        data-target="#exampleModalScrollable">
+                                        data-target="#createRoomModal">
                                     <i class="fas fa-plus"></i>
-                                    New Room
                                 </button>
                             </form>
 
-                            <div class="modal fade" id="exampleModalScrollable" tabindex="-1" role="dialog"
-                                 aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+                            <div class="modal fade" id="createRoomModal" tabindex="-1" role="dialog"
+                                 aria-labelledby="createRoomModalTitle" aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title" id="exampleModalScrollableTitle">Let's create new
+                                            <h5 class="modal-title" id="createRoomModalTitle">Let's create new
                                                 room!</h5>
                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                 <span aria-hidden="true">&times;</span>
@@ -161,6 +160,44 @@
         </div>
     </div>
 
+    <div class="modal fade" id="modalEdit" tabindex="-1" role="dialog"
+         aria-labelledby="createRoomModalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createRoomModalTitle">Let's edit
+                        room!</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <section class="blog-list px-3 py-5 p-md-4">
+                        <div class="container">
+                            <form action="/edit_room?id={{ room_id }}" method="POST">
+                                <div class="form-outline">
+                                    <input placeholder="{{ room_name }}" type="text" id="name" name="name"
+                                           class="form-control"/>
+                                    <label class="form-label" for="name">Name</label>
+                                </div>
+
+                                <div class="form-outline mb-2">
+                                    <textarea placeholder="{{ room_description }}" class="form-control"
+                                              name="description" id="description"
+                                              rows="2"></textarea>
+                                    <label class="form-label"
+                                           for="description">Description</label>
+                                </div>
+
+                                <button class="btn btn-primary btn-block">Save</button>
+                            </form>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 
     <script type="text/javascript">
@@ -199,6 +236,9 @@
                                 }
                             });
                         });
+                        $("#chat-btn").append(
+                            '<button id=\"edit-' + id + '\" type=\"button\" class=\"btn btn-primary px-3 mx-1\" data-toggle=\"modal\"data-target=\"#modalEdit\"><i class=\"fab fa-search\" aria-hidden=\"true\"></i></button>'
+                        );
                     } else {
                         $("#chat-btn").append(
                             '<button id=\"leave-' + id + '\" type=\"button\" class=\"btn btn-primary px-3\"><i class=\"fab fa-android\" aria-hidden=\"true\"></i></button>'

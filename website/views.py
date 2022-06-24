@@ -95,8 +95,8 @@ def follows():
 
 @views.route('/rooms', methods=['GET', 'POST'])
 def rooms():
+    room_id = request.args.get('id')
     if request.method == 'POST':
-        room_id = request.args.get('id')
         if room_id:
             content = request.form.get('content')
 
@@ -117,10 +117,17 @@ def rooms():
         for elem in all_rooms:
             room = Room.get(elem.room_id, None)
             a.append(room)
-    return render_template("rooms.html", user=current_user, rooms=a)
+    room = Room.query.filter_by(id=room_id).first()
+    if room:
+        room_name = room.name
+        room_description = room.description
+    else:
+        room_name = None
+        room_description = None
+    return render_template("rooms.html", user=current_user, rooms=a, room_id=room_id, room_name=room_name, room_description=room_description)
 
 
-@views.route('/create_room', methods=['POST'])
+@views.route('/create_room', methods=['GET', 'POST'])
 def create_room():
     if request.method == 'POST':
         name = request.form.get('name')
@@ -146,6 +153,22 @@ def create_room():
         room = Room.get(elem.room_id, None)
         a.append(room)
     return render_template("rooms.html", user=current_user, rooms=a)
+
+
+@views.route('/edit_room', methods=['GET', 'POST'])
+def edit_room():
+    room_id = request.args.get('id')
+    name = request.form.get('name')
+    description = request.form.get('description')
+
+    room = Room.query.filter_by(id=room_id).first()
+    if name:
+        room.name = name
+    if description:
+        room.description = description
+    db.session.commit()
+
+    return redirect('/rooms?id=' + room_id)
 
 
 @views.route('/get_room_messages', methods=['GET'])
@@ -289,7 +312,6 @@ def settings():
                 current_user.email = email
                 db.session.commit()
 
-
         if user_nickname:
             flash('Аккаунт с таким nickname существует.', category='error')
         elif nickname:
@@ -312,5 +334,5 @@ def settings():
                 current_user.password = generate_password_hash(password1, method='sha256')
                 db.session.commit()
 
-    #return redirect(url_for('views.home'))
+    # return redirect(url_for('views.home'))
     return render_template("settings.html", user=current_user)
