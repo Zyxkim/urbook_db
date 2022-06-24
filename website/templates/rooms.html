@@ -84,7 +84,13 @@
                                         <div class="modal-body">
                                             <section class="blog-list px-3 py-5 p-md-4">
                                                 <div class="container">
-                                                    <form action="/create_room" method="POST">
+                                                    <form action="/create_room" method="post"
+                                                          enctype="multipart/form-data">
+                                                        <div class="card mb-3 border-0" style="height: 70px">
+                                                            <div class="card-body">
+                                                                <input type="file" name="file" id="file" class="file"/>
+                                                            </div>
+                                                        </div>
                                                         <div class="form-outline">
                                                             <input type="text" id="name" name="name"
                                                                    class="form-control"/>
@@ -114,7 +120,7 @@
                     {% for room in rooms %}
                         <a href="/rooms?id={{ room.id }}" class="list-group-item list-group-item-action border-0">
                             <div class="d-flex align-items-start">
-                                <img src=""
+                                <img src="{{ room.image_path }}"
                                      class="rounded-circle mr-1" alt="avatar" width="40" height="40">
                                 <div class="flex-grow-1 ml-3">
                                     {{ room.name }}
@@ -130,7 +136,7 @@
                 <div class="py-2 px-2 border-bottom d-none d-lg-block">
                     <div class="d-flex align-items-center py-1">
                         <div class="position-relative">
-                            <img src=""
+                            <img src="{{ image_path }}"
                                  class="rounded-circle mr-1" alt="avatar" width="40" height="40">
                         </div>
                         <div class="flex-grow-1 pl-3" id="room-name">
@@ -174,7 +180,12 @@
                 <div class="modal-body">
                     <section class="blog-list px-3 py-5 p-md-4">
                         <div class="container">
-                            <form action="/edit_room?id={{ room_id }}" method="POST">
+                            <form action="/edit_room?id={{ room_id }}" method="post" enctype="multipart/form-data">
+                                <div class="card mb-3 border-0" style="height: 70px">
+                                    <div class="card-body">
+                                        <input type="file" name="file" id="file" class="file"/>
+                                    </div>
+                                </div>
                                 <div class="form-outline">
                                     <input placeholder="{{ room_name }}" type="text" id="name" name="name"
                                            class="form-control"/>

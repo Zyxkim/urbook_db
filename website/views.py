@@ -53,13 +53,18 @@ def home():
         followee_user.append(b)
 
     post_name = request.args.get('text')
+
+    image = Image.query.filter_by(user_id=current_user.id).first()
+    image_path = 'https://catherineasquithgallery.com/uploads/posts/2021-02/1614507972_15-p-yarko-belii-fon-24.jpg'
+    if image:
+        image_path = image.path
     if post_name:
         posts = Post.query.filter_by(name=post_name, user_id=current_user.id).all()
         return render_template("home.html", user=current_user, posts=posts, followed=followed_user,
-                               followers=followee_user)
+                               followers=followee_user, image_path=image_path)
     else:
         return render_template("home.html", user=current_user, posts=current_user.posts, followed=followed_user,
-                               followers=followee_user)
+                               followers=followee_user, image_path=image_path)
 
 
 @views.route('/delete_post', methods=['GET'])
@@ -120,16 +125,29 @@ def rooms():
         d, a = {}, []
         for elem in all_rooms:
             room = Room.get(elem.room_id, None)
-            a.append(room)
+            b = room
+
+            image = Image.query.filter_by(room_id=room.id).first()
+            if image:
+                image_path = image.path
+            else:
+                image_path = 'https://catherineasquithgallery.com/uploads/posts/2021-02/1614507972_15-p-yarko-belii-fon-24.jpg'
+            b.image_path = image_path
+            a.append(b)
     room = Room.query.filter_by(id=room_id).first()
     if room:
         room_name = room.name
         room_description = room.description
+        image = Image.query.filter_by(room_id=room.id).first()
+        if image:
+            image_path = image.path
+        else:
+            image_path = 'https://catherineasquithgallery.com/uploads/posts/2021-02/1614507972_15-p-yarko-belii-fon-24.jpg'
     else:
         room_name = None
         room_description = None
     return render_template("rooms.html", user=current_user, rooms=a, room_id=room_id, room_name=room_name,
-                           room_description=room_description)
+                           room_description=room_description, image_path=image_path)
 
 
 @views.route('/create_room', methods=['GET', 'POST'])
@@ -137,6 +155,7 @@ def create_room():
     if request.method == 'POST':
         name = request.form.get('name')
         description = request.form.get('description')
+        file = request.files['file']
 
         if len(name) < 1:
             flash('Name is too short!', category='error')
@@ -150,6 +169,15 @@ def create_room():
             }
             db.session.execute(user_room.insert(), params=d, )
             db.session.commit()
+
+            if file:
+                filename = str(uuid.uuid4()) + '.jpg'
+                path = os.path.join(UPLOAD_FOLDER, filename)
+                new_image = Image(path=DATA_SERVER + filename, room_id=new_room.id)
+                db.session.add(new_image)
+                file.save(path)
+                db.session.commit()
+
             flash('Room created!', category='success')
 
     all_rooms = db.session.query(user_room).filter_by(user_id=current_user.id).all()
@@ -165,12 +193,28 @@ def edit_room():
     room_id = request.args.get('id')
     name = request.form.get('name')
     description = request.form.get('description')
+    file = request.files['file']
+
+    image = Image.query.filter_by(room_id=room_id).first()
 
     room = Room.query.filter_by(id=room_id).first()
     if name:
         room.name = name
     if description:
         room.description = description
+
+    if file:
+        filename = str(uuid.uuid4()) + '.jpg'
+        path = os.path.join(UPLOAD_FOLDER, filename)
+
+        if image:
+            os.remove(UPLOAD_FOLDER + '\\' + image.path.split('/')[-1])
+            image.path = DATA_SERVER + filename
+        else:
+            new_image = Image(path=DATA_SERVER + filename, room_id=room_id)
+            db.session.add(new_image)
+        file.save(path)
+
     db.session.commit()
 
     return redirect('/rooms?id=' + room_id)
@@ -357,7 +401,7 @@ def settings():
             db.session.commit()
 
     # return redirect(url_for('views.home'))
-    image_path='https://www.imcyclist.com/wp-content/uploads/2013/08/light-grey-background-pattern-i3.jpg'
+    image_path = 'https://catherineasquithgallery.com/uploads/posts/2021-02/1614507972_15-p-yarko-belii-fon-24.jpg'
     if image:
         image_path = image.path
     return render_template("settings.html", user=current_user, image_path=image_path)
