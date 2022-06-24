@@ -16,11 +16,13 @@ DATA_SERVER = 'http://localhost:8000/'
 @views.route('/', methods=['GET', 'POST'])
 @login_required
 def home():
+    image_path = 'https://catherineasquithgallery.com/uploads/posts/2021-02/1614507972_15-p-yarko-belii-fon-24.jpg'
     if request.method == 'POST':
         name = request.form.get('name')
         fandom = request.form.get('fandom')
         description = request.form.get('description')
         content = request.form.get('content')
+        file = request.files['file']
 
         if len(name) < 1:
             flash('Name is too short!', category='error')
@@ -28,6 +30,15 @@ def home():
             new_post = Post(name=name, description=description, fandom=fandom, content=content, user_id=current_user.id)
             db.session.add(new_post)
             db.session.commit()
+
+            if file:
+                filename = str(uuid.uuid4()) + '.jpg'
+                path = os.path.join(UPLOAD_FOLDER, filename)
+                new_image = Image(path=DATA_SERVER + filename, post_id=new_post.id)
+                db.session.add(new_image)
+                file.save(path)
+                db.session.commit()
+
             flash('Post added!', category='success')
 
     follows = db.session.query(follower_followee).filter_by(follower_id=current_user.id).all()
@@ -72,10 +83,29 @@ def home():
         image_path = image.path
     if post_name:
         posts = Post.query.filter_by(name=post_name, user_id=current_user.id).all()
-        return render_template("home.html", user=current_user, posts=posts, followed=followed_user,
+
+        posts_with_photos = []
+        for data in posts:
+            image = Image.query.filter_by(post_id=data.id).first()
+            if image:
+                image_path_post = image.path
+            else:
+                image_path_post = 'https://catherineasquithgallery.com/uploads/posts/2021-02/1614507972_15-p-yarko-belii-fon-24.jpg'
+            data.image_path = image_path_post
+            posts_with_photos.append(data)
+        return render_template("home.html", user=current_user, posts=posts_with_photos, followed=followed_user,
                                followers=followee_user, image_path=image_path)
     else:
-        return render_template("home.html", user=current_user, posts=current_user.posts, followed=followed_user,
+        posts_with_photos = []
+        for data in current_user.posts:
+            image = Image.query.filter_by(post_id=data.id).first()
+            if image:
+                image_path_post = image.path
+            else:
+                image_path_post = 'https://catherineasquithgallery.com/uploads/posts/2021-02/1614507972_15-p-yarko-belii-fon-24.jpg'
+            data.image_path = image_path_post
+            posts_with_photos.append(data)
+        return render_template("home.html", user=current_user, posts=posts_with_photos, followed=followed_user,
                                followers=followee_user, image_path=image_path)
 
 
@@ -387,11 +417,33 @@ def user():
     post_name = request.args.get('text')
     if post_name:
         posts = Post.query.filter_by(name=post_name, user_id=user_id).all()
-        return render_template("user.html", user=user, posts=posts, followed=followed_user,
+
+        posts_with_photos = []
+        for data in posts:
+            image = Image.query.filter_by(post_id=data.id).first()
+            if image:
+                image_path_post = image.path
+            else:
+                image_path_post = 'https://catherineasquithgallery.com/uploads/posts/2021-02/1614507972_15-p-yarko-belii-fon-24.jpg'
+            data.image_path = image_path_post
+            posts_with_photos.append(data)
+
+        return render_template("user.html", user=user, posts=posts_with_photos, followed=followed_user,
                                followers=followee_user, is_following=is_following, image_path=image_path)
     else:
         posts = Post.query.filter_by(user_id=user_id).all()
-        return render_template("user.html", user=user, posts=posts, followed=followed_user,
+
+        posts_with_photos = []
+        for data in posts:
+            image = Image.query.filter_by(post_id=data.id).first()
+            if image:
+                image_path_post = image.path
+            else:
+                image_path_post = 'https://catherineasquithgallery.com/uploads/posts/2021-02/1614507972_15-p-yarko-belii-fon-24.jpg'
+            data.image_path = image_path_post
+            posts_with_photos.append(data)
+
+        return render_template("user.html", user=user, posts=posts_with_photos, followed=followed_user,
                                followers=followee_user, is_following=is_following, image_path=image_path)
 
 

@@ -62,7 +62,7 @@
         <hr>
         <div class="modal fade" id="exampleModalScrollable" tabindex="-1" role="dialog"
              aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-scrollable" role="document">
+            <div class="modal-dialog modal-lg modal-dialog-scrollable modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalScrollableTitle">Let's create new story!</h5>
@@ -73,7 +73,7 @@
                     <div class="modal-body">
                         <section class="blog-list px-3 py-5 p-md-4">
                             <div class="container">
-                                <form method="POST">
+                                <form method="POST" enctype="multipart/form-data">
                                     <div class="row mb-2">
                                         <div class="col">
                                             <div class="form-outline">
@@ -94,6 +94,12 @@
                                                 <textarea class="form-control" name="description" id="description"
                                                           rows="2"></textarea>
                                         <label class="form-label" for="description">Description</label>
+                                    </div>
+
+                                    <div class="card mb-3 border-0" style="height: 70px">
+                                        <div class="card-body">
+                                            <input type="file" name="file" id="file" class="file"/>
+                                        </div>
                                     </div>
 
                                     <div class="form-outline mb-2">
@@ -162,7 +168,8 @@
                         <div style="width: 350px">
                             <div class="card" style="margin-bottom: 20px">
                                 <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
-                                    <img src="https://mdbootstrap.com/img/new/standard/nature/184.jpg"
+                                    <img src="{{ post.image_path }}"
+                                         style="height: 200px; width: 100%;"
                                          class="img-fluid"/>
                                     <div class="card-img-overlay">
                                         <button type="button"
