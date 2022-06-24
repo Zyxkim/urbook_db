@@ -39,12 +39,10 @@ class User(db.Model, UserMixin):
     image = db.relationship('Image', backref='user', lazy=True)
 
     def follow(self, user):
-        if not self.is_following(user):
-            self.follower_followee.append(user)
+        self.follower_followee.append(user)
 
     def unfollow(self, user):
-        if self.is_following(user):
-            self.follower_followee.remove(user)
+        self.follower_followee.remove(user)
 
     def is_following(self, user):
         return self.follower_followee.filter(

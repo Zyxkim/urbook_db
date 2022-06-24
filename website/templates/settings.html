@@ -1,0 +1,140 @@
+{% extends "base.html" %} {% block title %}Home{% endblock %} {% block content %}
+    <header class="header text-center static_gradient_bg">
+        <ul class="circles">
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+        <nav class="navbar navbar-expand-lg navbar-dark">
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation"
+                    aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div id="navigation" class="collapse navbar-collapse flex-column">
+                <div style="height: 30vh"></div>
+                <div class="text-center mb-3">
+                    <span style="color: #ffffff; font-size: 30pt; font-weight: bold">Ur</span>
+                    <span style="color: #ffffff; font-size: 30pt; font-weight: bold">Book</span>
+                </div>
+                <ul class="navbar-nav flex-column text-left">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/"><i class="fas fa-book fa-fw mr-2"></i>Stories</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/rooms"><i class="fas fa-comment-dots fa-fw mr-2"></i>Rooms</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/follows"><i class="fas fa-users mr-2"></i>Follows</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/rooms"><i class="fas fa-cog fa-fw mr-2"></i>Settings</a>
+                    </li>
+                </ul>
+
+                <div class="my-2 my-md-3">
+                    <a class="btn btn-primary" href="/logout" target="_blank">Log Out</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="main-wrapper">
+        <div class="container text-center">
+            <div class="profile-section pt-3 pt-lg-4" style="margin-top: 20%">
+                <img class="profile-image rounded-circle mx-auto"
+                     style="width: 150px; height: 150px"
+                     src="https://mdbootstrap.com/img/new/standard/nature/184.jpg" alt="image">
+            </div>
+        </div>
+        <hr>
+        <div class="container">
+            <form method="POST">
+                <div class="card mb-3 border-0" style="height: 70px">
+                    <div class="card-body">
+                        <input type="file" name="file" id="file" class="inputfile"/>
+                    </div>
+                </div>
+
+                <div class="input-group flex-nowrap mb-3">
+                    <span class="input-group-text" id="addon-wrapping"><i class="fas fa-envelope"></i></span>
+                    <input
+                            type="email"
+                            class="form-control"
+                            id="email"
+                            name="email"
+                            placeholder="{{ user.email }}"
+                    />
+                </div>
+
+                <div class="input-group flex-nowrap mb-3">
+                    <span class="input-group-text" id="addon-wrapping"><i class="fas fa-user-circle"></i></span>
+                    <input
+                            type="text"
+                            class="form-control"
+                            id="firstName"
+                            name="firstName"
+                            placeholder="{{ user.nickname }}"
+                    />
+                </div>
+
+                <div class="input-group flex-nowrap mb-3">
+                    <span class="input-group-text" id="addon-wrapping"><i class="fas fa-font"></i></span>
+                    <input
+                            type="text"
+                            class="form-control"
+                            id="status"
+                            name="status"
+                            placeholder="{{ user.status }}"
+                    />
+                </div>
+
+                <div class="input-group flex-nowrap mb-3">
+                    <span class="input-group-text" id="addon-wrapping"><i class="fas fa-key"></i></span>
+                    <input
+                            type="password"
+                            class="form-control"
+                            id="password1"
+                            name="password1"
+                            placeholder="Enter password"
+                    />
+                </div>
+
+                <div class="input-group flex-nowrap mb-3">
+                    <span class="input-group-text" id="addon-wrapping"><i class="fas fa-key"></i></span>
+                    <input
+                            type="password"
+                            class="form-control"
+                            id="password2"
+                            name="password2"
+                            placeholder="Confirm password"
+                    />
+                </div>
+
+                {% with messages = get_flashed_messages(with_categories=true) %} {% if
+                                        messages %} {% for category, message in messages %} {% if category == 'error' %}
+                    <div class="alert alert-danger alter-dismissable fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="close" data-dismiss="alert">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+                {% endif %} {% endfor %} {% endif %} {% endwith %}
+
+                <button type="submit" class="btn btn-primary btn-block mb-4">
+                    Save
+                </button>
+            </form>
+        </div>
+    </div>
+
+{% endblock %}

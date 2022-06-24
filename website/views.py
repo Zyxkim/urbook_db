@@ -88,15 +88,6 @@ def follows():
 
     return render_template("follows.html", user=current_user, followed=followed_user, followers=followee_user)
 
-
-@views.route('/follow/<nickname>', methods=['GET', 'POST'])
-@login_required
-def follow(nickname):
-    user_follow = User.query.filter_by(nickname=nickname).first()
-    current_user.follow(user_follow)
-    db.session.commit()
-
-
 @views.route('/rooms', methods=['GET', 'POST'])
 def rooms():
     if request.method == 'POST':
@@ -204,3 +195,66 @@ def leave_room():
     db.session.query(user_room).filter_by(user_id=current_user.id, room_id=room_id).delete()
     db.session.commit()
     return {'SATUS': 'OK'}
+
+@views.route('/user', methods=['GET', 'POST'])
+@login_required
+def user():
+    user_id = request.args.get('id')
+    follows = db.session.query(follower_followee).filter_by(follower_id=user_id).all()
+    d, followed_user = {}, []
+    for elem in follows:
+        followee = User.query.filter_by(id=elem.followee_id).all()
+        for data in followee:
+            d = {
+                'id': data.id,
+                'nickname': data.nickname
+            }
+        followed_user.append(d)
+
+    followees = db.session.query(follower_followee).filter_by(followee_id=user_id).all()
+    b, followee_user = {}, []
+    for elem in followees:
+        follower = User.query.filter_by(id=elem.follower_id).all()
+        for data in follower:
+            b = {
+                'id': data.id,
+                'nickname': data.nickname
+            }
+        followee_user.append(b)
+
+    is_following = db.session.query(follower_followee).filter_by(follower_id=current_user.id, followee_id=user_id).first()
+    if is_following:
+        is_following = 1
+    else:
+        is_following = 0
+
+    post_name = request.args.get('text')
+    if post_name:
+        posts = Post.query.filter_by(name=post_name, user_id=user_id).all()
+        return render_template("user.html", user=current_user, posts=posts, followed=followed_user, followers=followee_user, is_following=is_following)
+    else:
+        posts = Post.query.filter_by(user_id=user_id).all()
+        return render_template("user.html", user=current_user, posts=posts, followed=followed_user, followers=followee_user, is_following=is_following)
+
+@views.route('/follow', methods=['GET', 'POST'])
+@login_required
+def follow():
+    user_id = request.args.get('id')
+    user_follow = User.query.filter_by(id=user_id).first()
+    current_user.follow(user_follow)
+    db.session.commit()
+    return {'Status': 'OK'}
+
+@views.route('/unfollow', methods=['GET', 'POST'])
+@login_required
+def unfollow():
+    user_id = request.args.get('id')
+    user_follow = User.query.filter_by(id=user_id).first()
+    current_user.unfollow(user_follow)
+    db.session.commit()
+    return {'Status': 'OK'}
+
+@views.route('/settings', methods=['GET', 'POST'])
+@login_required
+def settings():
+    return render_template("settings.html", user=current_user)

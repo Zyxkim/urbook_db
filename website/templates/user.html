@@ -36,7 +36,7 @@
                         <a class="nav-link" href="/follows"><i class="fas fa-users mr-2"></i>Follows</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/settings"><i class="fas fa-cog fa-fw mr-2"></i>Settings</a>
+                        <a class="nav-link" href="/rooms"><i class="fas fa-cog fa-fw mr-2"></i>Settings</a>
                     </li>
                 </ul>
 
@@ -148,12 +148,7 @@
                        placeholder="Search...">
             </div>
             <button id="search" class="btn btn-outline-primary mr-1"><i class="fas fa-search"></i></button>
-
-            <button type="button" class="btn btn-primary" data-toggle="modal"
-                    data-target="#exampleModalScrollable">
-                <i class="fas fa-plus"></i>
-                New Post
-            </button>
+            <div id="follow-btn"></div>
         </form>
         <div class="container-fluid py-3">
             <div class="container-fluid">
@@ -202,5 +197,40 @@
             </div>
         </div>
     </div>
+
+    <script type="text/javascript">
+        $(window).on('load', function () {
+            const urlParams = new URLSearchParams(window.location.search);
+            const id = urlParams.get('id');
+            $("#follow-btn").empty()
+            if (!{{ is_following }}) {
+                $("#follow-btn").append(
+                    '<button id=\"follow-' + id + '\" type=\"button\" class=\"btn btn-primary px-3\"><i class=\"fab fa-search\" aria-hidden=\"true\"></i></button>'
+                );
+                $("#follow-" + id).click(function () {
+                    $.ajax({
+                        type: "get",
+                        url: "/follow?id=" + id,
+                        success: function (data) {
+                            window.location = "/user?id=" + id;
+                        }
+                    });
+                });
+            } else {
+                $("#follow-btn").append(
+                    '<button id=\"unfollow-' + id + '\" type=\"button\" class=\"btn btn-primary px-3\"><i class=\"fab fa-android\" aria-hidden=\"true\"></i></button>'
+                );
+                $("#unfollow-" + id).click(function () {
+                    $.ajax({
+                        type: "get",
+                        url: "/unfollow?id=" + id,
+                        success: function (data) {
+                            window.location = "/user?id=" + id;
+                        }
+                    });
+                });
+            }
+        });
+    </script>
 
 {% endblock %}
