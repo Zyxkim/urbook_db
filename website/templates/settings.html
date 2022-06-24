@@ -52,15 +52,15 @@
             <div class="profile-section pt-3 pt-lg-4" style="margin-top: 20%">
                 <img class="profile-image rounded-circle mx-auto"
                      style="width: 150px; height: 150px"
-                     src="https://mdbootstrap.com/img/new/standard/nature/184.jpg" alt="image">
+                     src="{{ image_path }}" alt="image">
             </div>
         </div>
         <hr>
         <div class="container">
-            <form method="POST">
+            <form method="post" enctype="multipart/form-data">
                 <div class="card mb-3 border-0" style="height: 70px">
                     <div class="card-body">
-                        <input type="file" name="file" id="file" class="inputfile"/>
+                        <input type="file" name="file" id="file" class="file"/>
                     </div>
                 </div>
 

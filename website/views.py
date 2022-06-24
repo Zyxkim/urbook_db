@@ -1,12 +1,16 @@
+import os
+
 from flask import Blueprint, render_template, request, flash, jsonify, redirect, url_for
 from flask_login import login_required, current_user, login_user
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from .models import *
-from . import db
+from . import db, UPLOAD_FOLDER
 import json
+import uuid
 
 views = Blueprint('views', __name__)
+DATA_SERVER = 'http://localhost:8000/'
 
 
 @views.route('/', methods=['GET', 'POST'])
@@ -124,7 +128,8 @@ def rooms():
     else:
         room_name = None
         room_description = None
-    return render_template("rooms.html", user=current_user, rooms=a, room_id=room_id, room_name=room_name, room_description=room_description)
+    return render_template("rooms.html", user=current_user, rooms=a, room_id=room_id, room_name=room_name,
+                           room_description=room_description)
 
 
 @views.route('/create_room', methods=['GET', 'POST'])
@@ -293,12 +298,16 @@ def unfollow():
 @views.route('/settings', methods=['GET', 'POST'])
 @login_required
 def settings():
+    image = Image.query.filter_by(user_id=current_user.id).first()
+
     if request.method == 'POST':
         email = request.form.get('email')
         nickname = request.form.get('firstName')
         status = request.form.get('status')
         password1 = request.form.get('password1')
         password2 = request.form.get('password2')
+
+        file = request.files['file']
 
         user = User.query.filter_by(email=email).first()
         user_nickname = User.query.filter_by(nickname=nickname).first()
@@ -334,5 +343,21 @@ def settings():
                 current_user.password = generate_password_hash(password1, method='sha256')
                 db.session.commit()
 
+        if file:
+            filename = str(uuid.uuid4()) + '.jpg'
+            path = os.path.join(UPLOAD_FOLDER, filename)
+
+            if image:
+                os.remove(UPLOAD_FOLDER + '\\' + image.path.split('/')[-1])
+                image.path = DATA_SERVER + filename
+            else:
+                new_image = Image(path=DATA_SERVER + filename, user_id=current_user.id)
+                db.session.add(new_image)
+            file.save(path)
+            db.session.commit()
+
     # return redirect(url_for('views.home'))
-    return render_template("settings.html", user=current_user)
+    image_path='https://www.imcyclist.com/wp-content/uploads/2013/08/light-grey-background-pattern-i3.jpg'
+    if image:
+        image_path = image.path
+    return render_template("settings.html", user=current_user, image_path=image_path)

@@ -25,7 +25,7 @@ class User(db.Model, UserMixin):
 
     posts = db.relationship('Post')
     messages = db.relationship('Message', backref='user', lazy=True)
-    #user_room = db.relationship('Room', secondary=user_room, lazy='subquery', backref=db.backref('rooms', lazy=True))
+    # user_room = db.relationship('Room', secondary=user_room, lazy='subquery', backref=db.backref('rooms', lazy=True))
     user_room = db.relationship(
         'Room', secondary=user_room,
         primaryjoin=(user_room.c.user_id == id),
@@ -103,3 +103,14 @@ class Image(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
     room_id = db.Column(db.Integer, db.ForeignKey('room.id'), nullable=True)
     post_id = db.Column(db.Integer, db.ForeignKey('post.id'), nullable=True)
+
+    @staticmethod
+    def get(id=None, user_id=None, room_id=None, post_id=None):
+        if id:
+            return Room.query.get(id)
+        if user_id:
+            return Room.query.filter_by(user_id=user_id).first()
+        if room_id:
+            return Room.query.filter_by(user_id=room_id).first()
+        if post_id:
+            return Room.query.filter_by(user_id=post_id).first()
