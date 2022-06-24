@@ -62,63 +62,41 @@
             </div>
         </section>
         <section class="blog-list">
-            <div class="block">
-                <div class="row">
-                    <div class="col-sm">
-                        <div class="container mt-2">
-                            <div class="d-flex justify-content-center row">
-                                <div class="col-md-6">
-                                    <div class="p-1 bg-white text-center">
-                                        <h5>Follows</h5>
-
-                                        {% for follow in followed %}
-                                            <div class="d-flex flex-row justify-content-between align-items-center">
-                                                <div class="d-flex flex-row align-items-center">
-                                                    <img class="rounded-circle" src="https://i.imgur.com/KmT515u.jpg"
-                                                         width="55">
-                                                    <div class="d-flex flex-column align-items-start ml-2"><span
-                                                            class="font-weight-bold"> {{ follow.nickname }}</span>
-                                                    </div>
-                                                </div>
-                                                <div class="d-flex flex-row align-items-center mt-2">
-                                                    <button class="btn btn-outline-primary btn-sm" type="button">
-                                                        Unfollow
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        {% endfor %}
-
+            <div class="container-fluid py-2">
+                <h6>Follows</h6>
+                <div class="container-fluid">
+                    <div class="row overflow-auto flex-row flex-nowrap">
+                        {% for follow in followed %}
+                            <div class="col-2">
+                                <div class="card border-0 text-center" style="width: 150px; height: 160px">
+                                    <div class="card-body" style="width: 150px; height: 150px">
+                                        <img src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"
+                                             class="rounded-circle" style="width: 100px; height: 100px"
+                                             alt="Avatar"/>
+                                        <h5 class="card-title">{{ follow.nickname }}</h5>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        {% endfor %}
                     </div>
-                    <div class="col-sm">
-                        <div class="container mt-2">
-                            <div class="d-flex justify-content-center row">
-                                <div class="col-md-6">
-                                    <div class="p-1 bg-white text-center">
-                                        <h5>Followers</h5>
-                                        {% for follow in followers %}
-                                            <div class="d-flex flex-row justify-content-between align-items-center">
-                                                <div class="d-flex flex-row align-items-center">
-                                                    <img class="rounded-circle" src="https://i.imgur.com/KmT515u.jpg"
-                                                         width="55">
-                                                    <div class="d-flex flex-column align-items-start ml-2"><span
-                                                            class="font-weight-bold"> {{ follow.nickname }}</span>
-                                                    </div>
-                                                </div>
-                                                <div class="d-flex flex-row align-items-center mt-2">
-                                                    <button class="btn btn-outline-primary btn-sm" type="button">
-                                                        Unfollow
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        {% endfor %}
+                </div>
+            </div>
+            <div class="container-fluid py-2">
+                <h6>Followers</h6>
+                <div class="container-fluid">
+                    <div class="row overflow-auto flex-row flex-nowrap">
+                        {% for follow in followers %}
+                            <div class="col-2">
+                                <div class="card border-0 text-center" style="width: 150px; height: 160px">
+                                    <div class="card-body" style="width: 150px; height: 150px">
+                                        <img src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"
+                                             class="rounded-circle" style="width: 100px; height: 100px"
+                                             alt="Avatar"/>
+                                        <h5 class="card-title">{{ follow.nickname }}</h5>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        {% endfor %}
                     </div>
                 </div>
             </div>

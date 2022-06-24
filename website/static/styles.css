@@ -260,3 +260,9 @@ div.content {
     margin: 0.4em;
     width: 100%;
 }
+
+.card-body {
+    height: 200px;
+    width: 200px;
+    margin-right: 5px;
+}

@@ -49,141 +49,155 @@
 
     <div class="main-wrapper">
         <div class="container text-center">
-            <div class="profile-section pt-3 pt-lg-0">
+            <div class="profile-section pt-3 pt-lg-4">
                 <img class="profile-image rounded-circle mx-auto"
                      style="width: 150px; height: 150px"
-                     src="/static/images/3.png" alt="image">
-                <h1 class="blog-name pt-lg-4 mb-0">
+                     src="https://mdbootstrap.com/img/new/standard/nature/184.jpg" alt="image">
+                <h1 class="blog-name pt-lg-1 mb-0">
                     {{ user.nickname }}
                 </h1>
                 <div class="bio mb-3">{{ user.status }}</div>
-
-                <hr>
             </div>
         </div>
-        <section class="cta-section theme-bg-light py-5">
-            <div class="container text-center">
-                <h2 class="heading">Search post</h2>
-                <form class="signup-form form-inline justify-content-center pt-3">
-                    <div class="form-group">
-                        <input type="text" id="search-text" name="text" class="form-control mr-md-1 semail"
-                               placeholder="Search...">
+        <hr>
+        <div class="modal fade" id="exampleModalScrollable" tabindex="-1" role="dialog"
+             aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalScrollableTitle">Let's create new story!</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                     </div>
-                    <button id="search" class="btn btn-outline-primary mr-1"><i class="fas fa-search"></i></button>
-
-                    <button type="button" class="btn btn-primary" data-toggle="modal"
-                            data-target="#exampleModalScrollable">
-                        <i class="fas fa-plus"></i>
-                        New Post
-                    </button>
-                </form>
-                <div class="modal fade" id="exampleModalScrollable" tabindex="-1" role="dialog"
-                     aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-scrollable" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalScrollableTitle">Let's create new story!</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <section class="blog-list px-3 py-5 p-md-4">
-                                    <div class="container">
-                                        <form method="POST">
-                                            <div class="row mb-2">
-                                                <div class="col">
-                                                    <div class="form-outline">
-                                                        <input type="text" id="name" name="name" class="form-control"/>
-                                                        <label class="form-label" for="name">Name</label>
-                                                    </div>
-                                                </div>
-                                                <div class="col">
-                                                    <div class="form-outline">
-                                                        <input type="text" id="fandom" name="fandom"
-                                                               class="form-control"/>
-                                                        <label class="form-label" for="fandom">Fandom</label>
-                                                    </div>
-                                                </div>
+                    <div class="modal-body">
+                        <section class="blog-list px-3 py-5 p-md-4">
+                            <div class="container">
+                                <form method="POST">
+                                    <div class="row mb-2">
+                                        <div class="col">
+                                            <div class="form-outline">
+                                                <input type="text" id="name" name="name" class="form-control"/>
+                                                <label class="form-label" for="name">Name</label>
                                             </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="form-outline">
+                                                <input type="text" id="fandom" name="fandom"
+                                                       class="form-control"/>
+                                                <label class="form-label" for="fandom">Fandom</label>
+                                            </div>
+                                        </div>
+                                    </div>
 
-                                            <div class="form-outline mb-2">
+                                    <div class="form-outline mb-2">
                                                 <textarea class="form-control" name="description" id="description"
                                                           rows="2"></textarea>
-                                                <label class="form-label" for="description">Description</label>
-                                            </div>
+                                        <label class="form-label" for="description">Description</label>
+                                    </div>
 
-                                            <div class="form-outline mb-2">
+                                    <div class="form-outline mb-2">
                                                 <textarea class="form-control" name="content" id="content"
                                                           rows="4"></textarea>
-                                                <label class="form-label" for="content">Story</label>
-                                            </div>
-
-                                            <button class="btn btn-primary btn-block">Save</button>
-                                        </form>
+                                        <label class="form-label" for="content">Story</label>
                                     </div>
-                                </section>
+
+                                    <button class="btn btn-primary btn-block">Save</button>
+                                </form>
                             </div>
-                        </div>
+                        </section>
                     </div>
                 </div>
             </div>
-        </section>
-
-        <section class="blog-list px-3 py-5 p-md-5">
-
-            <div class="card border-0 px-3 pt-3">
-                <div>
-                    <section class="text-center">
-                        <div class="row">
-
-                            {% for post in posts %}
-                                <div class="col-lg-4 col-md-12 mb-4">
-                                    <div class="card">
-                                        <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
-                                            <img src="https://mdbootstrap.com/img/new/standard/nature/184.jpg"
-                                                 class="img-fluid"/>
-                                            <div class="card-img-overlay">
-                                                <button type="button"
-                                                        class="btn-close btn-close-white" id="delete-{{ post.id }}"
-                                                        style="margin-left: 95%"
-                                                        aria-label="Delete"></button>
-                                                <script>
-                                                    $("#delete-{{ post.id }}").click(function () {
-                                                        $.ajax({
-                                                            type: "get",
-                                                            url: "/delete_post?id=" + {{ post.id }},
-                                                            success: function (data) {
-                                                            }
-                                                        });
-                                                        window.location = "/";
-                                                    });
-                                                </script>
-                                            </div>
-                                            <a href="#!">
-                                                <div class="mask"
-                                                     style="background-color: rgba(251, 251, 251, 0.15);"></div>
-                                            </a>
-                                        </div>
-                                        <div class="card-body">
-                                            <h5 class="card-title"> {{ post.name }} </h5>
-                                            <p class="card-text">
-                                                {{ post.description[:50] + "..." }}
-                                            </p>
-                                            <a href="#!" class="btn btn-primary">Read</a>
-                                        </div>
-                                        <div class="card-footer">
-                                            <small class="text-muted">{{ post.creation_date }}</small>
-                                        </div>
-                                    </div>
-                                </div>
-                            {% endfor %}
-
+        </div>
+        <div class="container-fluid py-2">
+            <h6>Follows</h6>
+            <div class="container-fluid">
+                <div class="row overflow-auto flex-row flex-nowrap">
+                    {% for follow in followed %}
+                        <div class="col-1">
+                            <img src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"
+                                 class="rounded-circle" style="width: 50px; height: 50px"
+                                 alt="Avatar"/>
                         </div>
-                    </section>
+                    {% endfor %}
                 </div>
             </div>
-        </section>
+        </div>
+        <div class="container-fluid py-2">
+            <h6>Followers</h6>
+            <div class="container-fluid">
+                <div class="row overflow-auto flex-row flex-nowrap">
+                    {% for follow in followers %}
+                        <div class="col-1">
+                            <img src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"
+                                 class="rounded-circle" style="width: 50px; height: 50px"
+                                 alt="Avatar"/>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <hr>
+        <form class="signup-form form-inline justify-content-center pt-0">
+            <div class="form-group">
+                <input type="text" id="search-text" name="text" class="form-control mr-md-1 semail"
+                       placeholder="Search...">
+            </div>
+            <button id="search" class="btn btn-outline-primary mr-1"><i class="fas fa-search"></i></button>
+
+            <button type="button" class="btn btn-primary" data-toggle="modal"
+                    data-target="#exampleModalScrollable">
+                <i class="fas fa-plus"></i>
+                New Post
+            </button>
+        </form>
+        <div class="container-fluid py-3">
+            <div class="container-fluid">
+                <div class="row overflow-auto flex-row flex-nowrap">
+                    {% for post in posts %}
+                        <div style="width: 350px">
+                            <div class="card" style="margin-bottom: 20px">
+                                <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
+                                    <img src="https://mdbootstrap.com/img/new/standard/nature/184.jpg"
+                                         class="img-fluid"/>
+                                    <div class="card-img-overlay">
+                                        <button type="button"
+                                                class="btn-close btn-close-white" id="delete-{{ post.id }}"
+                                                style="margin-left: 95%"
+                                                aria-label="Delete"></button>
+                                        <script>
+                                            $("#delete-{{ post.id }}").click(function () {
+                                                $.ajax({
+                                                    type: "get",
+                                                    url: "/delete_post?id=" + {{ post.id }},
+                                                    success: function (data) {
+                                                    }
+                                                });
+                                                window.location = "/";
+                                            });
+                                        </script>
+                                    </div>
+                                    <a href="#!">
+                                        <div class="mask"
+                                             style="background-color: rgba(251, 251, 251, 0.15);"></div>
+                                    </a>
+                                </div>
+                                <div class="card-body" style="width: 100%">
+                                    <h5 class="card-title"> {{ post.name }} </h5>
+                                    <p class="card-text">
+                                        {{ post.description[:150] + "..." }}
+                                    </p>
+                                </div>
+                                <div class="card-footer">
+                                    <small class="text-muted">{{ post.creation_date }}</small>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
     </div>
 
 {% endblock %}

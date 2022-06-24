@@ -24,12 +24,34 @@ def home():
             db.session.commit()
             flash('Post added!', category='success')
 
+    follows = db.session.query(follower_followee).filter_by(follower_id=current_user.id).all()
+    d, followed_user = {}, []
+    for elem in follows:
+        followee = User.query.filter_by(id=elem.followee_id).all()
+        for data in followee:
+            d = {
+                'id': data.id,
+                'nickname': data.nickname
+            }
+        followed_user.append(d)
+
+    followees = db.session.query(follower_followee).filter_by(followee_id=current_user.id).all()
+    b, followee_user = {}, []
+    for elem in followees:
+        follower = User.query.filter_by(id=elem.follower_id).all()
+        for data in follower:
+            b = {
+                'id': data.id,
+                'nickname': data.nickname
+            }
+        followee_user.append(b)
+
     post_name = request.args.get('text')
     if post_name:
         posts = Post.query.filter_by(name=post_name, user_id=current_user.id).all()
-        return render_template("home.html", user=current_user, posts=posts)
+        return render_template("home.html", user=current_user, posts=posts, followed=followed_user, followers=followee_user)
     else:
-        return render_template("home.html", user=current_user, posts=current_user.posts)
+        return render_template("home.html", user=current_user, posts=current_user.posts, followed=followed_user, followers=followee_user)
 
 
 @views.route('/delete_post', methods=['GET'])
