@@ -19,7 +19,7 @@ class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(150), unique=True, nullable=False)
     password = db.Column(db.String(88), nullable=False)
-    nickname = db.Column(db.String(150), unique=True, nullable=False)
+    nickname = db.Column(db.String(64), unique=True, nullable=False)
     status = db.Column(db.String(255), nullable=True)
     registration_date = db.Column(db.DateTime(timezone=True), default=func.now())
 
@@ -52,8 +52,8 @@ class User(db.Model, UserMixin):
 class Room(db.Model):
     __tablename__ = 'room'
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(255))
-    description = db.Column(db.Text)
+    name = db.Column(db.String(64))
+    description = db.Column(db.String(128))
     creation_date = db.Column(db.DateTime(timezone=True), default=func.now())
     messages = db.relationship('Message', backref='room', lazy=True)
     image = db.relationship('Image', backref='room', lazy=True)
@@ -88,9 +88,9 @@ class Message(db.Model):
 class Post(db.Model):
     __tablename__ = 'post'
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(255), nullable=False)
-    description = db.Column(db.Text, nullable=True)
-    fandom = db.Column(db.String(255), nullable=True)
+    name = db.Column(db.String(64), nullable=False)
+    description = db.Column(db.String(255), nullable=True)
+    fandom = db.Column(db.String(64), nullable=True)
     content = db.Column(db.Text, nullable=False)
     creation_date = db.Column(db.DateTime(timezone=True), default=func.now())
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
