@@ -314,6 +314,7 @@ def get_room_messages():
         }
         db.session.execute(user_room.insert(), params=d, )
         db.session.commit()
+        return redirect('/rooms?id=' + room_id)
 
     all_messages = Message.get(None, room_id)
     room_name = Room.get(room_id, None).name

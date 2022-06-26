@@ -51,9 +51,9 @@
     <div class="main-wrapper" id="main-wrapper">
 
         <div class="row g-0">
-            <div class="col-12 col-lg-5 col-xl-3 border-right">
+            <div class="col-12 col-lg-5 col-xl-4 border-right">
 
-                <div class="px-4 d-none d-md-block">
+                <div class="px-3 d-none d-md-block">
                     <div class="d-flex align-items-center">
                         <div class="flex-grow-1">
                             <form class="signup-form form-inline justify-content-center pt-3">
@@ -116,7 +116,7 @@
                     </div>
                 </div>
 
-                <div id="rooms">
+                <div id="rooms" class="px-3 py-3 d-none d-md-block">
                     {% for room in rooms %}
                         <a href="/rooms?id={{ room.id }}" class="list-group-item list-group-item-action border-0">
                             <div class="d-flex align-items-start">
@@ -132,7 +132,7 @@
 
                 <hr class="d-block d-lg-none mt-1 mb-0">
             </div>
-            <div class="col-12 col-lg-7 col-xl-9" style="padding: 0">
+            <div class="col-12 col-lg-7 col-xl-8" style="padding: 0">
                 <div class="py-2 px-2 border-bottom d-none d-lg-block">
                     <div class="d-flex align-items-center py-1">
                         <div class="position-relative">
@@ -147,7 +147,7 @@
                 </div>
 
                 <div class="chat-messages p-4">
-                    <div id="chat-history" style="overflow-x: auto; height: 100vh; position: relative">
+                    <div id="chat-history" style="overflow-x: auto; height: 100vh; position: relative; padding: 10px">
                     </div>
 
                 </div>
@@ -241,7 +241,7 @@
                     $("#chat-btn").empty()
                     if (data.role == "admin") {
                         $("#chat-btn").append(
-                            '<button id=\"delete-' + id + '\" type=\"button\" class=\"btn btn-primary px-3\"><i class=\"fab fa-search\" aria-hidden=\"true\"></i></button>'
+                            '<button id=\"delete-' + id + '\" type=\"button\" class=\"btn btn-primary px-3\">Delete</button>'
                         );
                         $("#delete-" + id).click(function () {
                             $.ajax({
@@ -253,11 +253,11 @@
                             });
                         });
                         $("#chat-btn").append(
-                            '<button id=\"edit-' + id + '\" type=\"button\" class=\"btn btn-primary px-3 mx-1\" data-toggle=\"modal\"data-target=\"#modalEdit\"><i class=\"fab fa-search\" aria-hidden=\"true\"></i></button>'
+                            '<button id=\"edit-' + id + '\" type=\"button\" class=\"btn btn-primary px-3 mx-1\" data-toggle=\"modal\"data-target=\"#modalEdit\">Edit</button>'
                         );
                     } else {
                         $("#chat-btn").append(
-                            '<button id=\"leave-' + id + '\" type=\"button\" class=\"btn btn-primary px-3\"><i class=\"fab fa-android\" aria-hidden=\"true\"></i></button>'
+                            '<button id=\"leave-' + id + '\" type=\"button\" class=\"btn btn-primary px-3\">Leave</button>'
                         );
                         $("#leave-" + id).click(function () {
                             $.ajax({
@@ -295,7 +295,7 @@
                                     '<div class=\"flex-shrink-1 rounded py-2 px-3\" style=\"min-width: 150px; background: #f3f3f3\">' +
                                     '<a href=\"/user?id=' + x.user_id + '\">' + x.user_nickname + '</a>' +
                                     '<div class=\"text-muted small text-nowrap\">' + x.creation_date + '</div><hr>' +
-                                    '<img src=\"' + x.image_path + '\" class=\"img-fluid\" alt=\"img\" style=\"max-height: 400px\"><hr>' +
+                                    '<img src=\"' + x.image_path + '\" class=\"img-fluid\" alt=\"img\" style=\"max-height: 250px\"><hr>' +
                                     x.content + '</div></div>');
                             } else {
                                 $("#chat-history").append('<div class=\"' + chat_class + ' pb-4\">' +

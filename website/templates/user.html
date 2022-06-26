@@ -217,7 +217,7 @@
             $("#follow-btn").empty()
             if (!{{ is_following }}) {
                 $("#follow-btn").append(
-                    '<button id=\"follow-' + id + '\" type=\"button\" class=\"btn btn-primary px-3\"><i class=\"fab fa-search\" aria-hidden=\"true\"></i></button>'
+                    '<button id=\"follow-' + id + '\" type=\"button\" class=\"btn btn-primary px-3\">Follow</button>'
                 );
                 $("#follow-" + id).click(function () {
                     $.ajax({
@@ -230,7 +230,7 @@
                 });
             } else {
                 $("#follow-btn").append(
-                    '<button id=\"unfollow-' + id + '\" type=\"button\" class=\"btn btn-primary px-3\"><i class=\"fab fa-android\" aria-hidden=\"true\"></i></button>'
+                    '<button id=\"unfollow-' + id + '\" type=\"button\" class=\"btn btn-primary px-3\">Unfollow</button>'
                 );
                 $("#unfollow-" + id).click(function () {
                     $.ajax({
