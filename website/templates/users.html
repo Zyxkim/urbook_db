@@ -61,45 +61,22 @@
                 </form>
             </div>
         </section>
-        <section class="blog-list">
-            <div class="container-fluid py-2">
-                <h6>Follows</h6>
-                <div class="container-fluid">
-                    <div class="row overflow-auto flex-row flex-nowrap">
-                        {% for follow in followed %}
-                            <div class="col-2">
-                                <div class="card border-0 text-center" style="width: 150px; height: 160px">
-                                    <div class="card-body" style="width: 150px; height: 150px">
-                                        <img src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"
-                                             class="rounded-circle" style="width: 100px; height: 100px"
-                                             alt="Avatar"/>
-                                        <h5 class="card-title">{{ follow.nickname }}</h5>
-                                    </div>
-                                </div>
-                            </div>
-                        {% endfor %}
+        <section class="blog-list py-2">
+            {% for user in users %}
+                <div class="container-sm" style="width: 450px; height: 150px">
+                    <div class="card flex-row flex-wrap">
+                        <div class="card-header border-0" style="background-color: white">
+                            <img src="{{ user.image_path }}" alt="" style="width: 100px; height: 100px; border-radius: 50%">
+                        </div>
+                        <div class="card-block px-2">
+                            <br>
+                            <a href="/user?id={{ user.id }}">{{ user.nickname }}</a>
+                            <p class="card-text">{{ user.status }}</p>
+                        </div>
+                        <div class="w-100"></div>
                     </div>
                 </div>
-            </div>
-            <div class="container-fluid py-2">
-                <h6>Followers</h6>
-                <div class="container-fluid">
-                    <div class="row overflow-auto flex-row flex-nowrap">
-                        {% for follow in followers %}
-                            <div class="col-2">
-                                <div class="card border-0 text-center" style="width: 150px; height: 160px">
-                                    <div class="card-body" style="width: 150px; height: 150px">
-                                        <img src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"
-                                             class="rounded-circle" style="width: 100px; height: 100px"
-                                             alt="Avatar"/>
-                                        <h5 class="card-title">{{ follow.nickname }}</h5>
-                                    </div>
-                                </div>
-                            </div>
-                        {% endfor %}
-                    </div>
-                </div>
-            </div>
+            {% endfor %}
         </section>
     </div>
 

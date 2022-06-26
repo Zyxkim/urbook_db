@@ -125,43 +125,30 @@ def delete_post():
     return render_template("home.html", user=current_user)
 
 
-@views.route('/follows', methods=['GET', 'POST'])
+@views.route('/users', methods=['GET', 'POST'])
 def follows():
-    follows = db.session.query(follower_followee).filter_by(follower_id=current_user.id).all()
-    d, followed_user = {}, []
-    for elem in follows:
-        followee = User.query.filter_by(id=elem.followee_id).all()
-        for data in followee:
-            image = Image.query.filter_by(user_id=data.id).first()
-            if image:
-                image_path = image.path
-            else:
-                image_path = 'https://catherineasquithgallery.com/uploads/posts/2021-02/1614507972_15-p-yarko-belii-fon-24.jpg'
-            d = {
-                'id': data.id,
-                'nickname': data.nickname,
-                'image_path': image_path
-            }
-        followed_user.append(d)
+    user_name = request.args.get('text')
 
-    followees = db.session.query(follower_followee).filter_by(followee_id=current_user.id).all()
-    b, followee_user = {}, []
-    for elem in followees:
-        follower = User.query.filter_by(id=elem.follower_id).all()
-        for data in follower:
-            image = Image.query.filter_by(user_id=data.id).first()
-            if image:
-                image_path = image.path
-            else:
-                image_path = 'https://catherineasquithgallery.com/uploads/posts/2021-02/1614507972_15-p-yarko-belii-fon-24.jpg'
-            b = {
-                'id': data.id,
-                'nickname': data.nickname,
-                'image_path': image_path
-            }
-        followee_user.append(b)
+    if user_name:
+        users = db.session.query(User).filter(User.nickname.startswith(user_name)).all()
+        d, found_users = {}, []
+        for elem in users:
+            if not elem.id == current_user.id:
+                image = Image.query.filter_by(user_id=elem.id).first()
+                if image:
+                    image_path = image.path
+                else:
+                    image_path = 'https://catherineasquithgallery.com/uploads/posts/2021-02/1614507972_15-p-yarko-belii-fon-24.jpg'
+                d = {
+                    'id': elem.id,
+                    'nickname': elem.nickname,
+                    'image_path': image_path,
+                    'status': elem.status
+                }
+                found_users.append(d)
 
-    return render_template("follows.html", user=current_user, followed=followed_user, followers=followee_user)
+        return render_template("users.html", user=current_user, users=found_users)
+    return render_template("users.html", user=current_user, users=[])
 
 
 @views.route('/rooms', methods=['GET', 'POST'])
