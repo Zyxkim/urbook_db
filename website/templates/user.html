@@ -153,6 +153,7 @@
         <div class="container-fluid py-3">
             <div class="container-fluid">
                 <div class="row overflow-auto flex-row flex-nowrap">
+
                     {% for post in posts %}
                         <div style="width: 350px">
                             <div class="card" style="margin-bottom: 20px">
@@ -160,40 +161,50 @@
                                     <img src="{{ post.image_path }}"
                                          style="height: 200px; width: 100%;"
                                          class="img-fluid"/>
-                                    <div class="card-img-overlay">
-                                        <button type="button"
-                                                class="btn-close btn-close-white" id="delete-{{ post.id }}"
-                                                style="margin-left: 95%"
-                                                aria-label="Delete"></button>
-                                        <script>
-                                            $("#delete-{{ post.id }}").click(function () {
-                                                $.ajax({
-                                                    type: "get",
-                                                    url: "/delete_post?id=" + {{ post.id }},
-                                                    success: function (data) {
-                                                    }
-                                                });
-                                                window.location = "/";
-                                            });
-                                        </script>
-                                    </div>
-                                    <a href="#!">
-                                        <div class="mask"
-                                             style="background-color: rgba(251, 251, 251, 0.15);"></div>
-                                    </a>
                                 </div>
                                 <div class="card-body card-body-custom" style="width: 100%">
                                     <h5 class="card-title"> {{ post.name }} </h5>
-                                    <p class="card-text">
-                                        {{ post.description[:150] + "..." }}
+                                    <p class="card-text" style="height: 70px">
+                                        {{ post.description[:100] + "..." }}
                                     </p>
+                                    <button type="button" class="btn btn-outline-primary btn-sm" data-toggle="modal"
+                                            data-target="#modal-{{ post.id }}" style="height: 30px; padding-x: 5px">
+                                        Read
+                                    </button>
                                 </div>
                                 <div class="card-footer">
                                     <small class="text-muted">{{ post.creation_date }}</small>
                                 </div>
                             </div>
                         </div>
+
+                        <div class="modal fade" id="modal-{{ post.id }}" tabindex="-1" role="dialog"
+                             aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+                            <div class="modal-dialog modal-lg modal-dialog-scrollable modal-dialog-centered"
+                                 role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalScrollableTitle">{{ post.fandom }}</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="container">
+                                            <p class="fs-4 text-center fw-bold"> {{ post.name }}</p>
+                                            <img src="{{ post.image_path }}"
+                                                 style="height: 400px; max-width: 100%;"
+                                            />
+                                            <hr>
+                                            <p class="fst-italic"> {{ post.description }}</div>
+                                        <hr>
+                                        <p class="fs-6">{{ post.content }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     {% endfor %}
+
                 </div>
             </div>
         </div>
