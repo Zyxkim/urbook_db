@@ -39,7 +39,7 @@ class User(db.Model, UserMixin):
         primaryjoin=(follower_followee.c.follower_id == id),
         secondaryjoin=(follower_followee.c.followee_id == id),
         backref=db.backref('followers', lazy='dynamic'), lazy='dynamic')
-    image = db.relationship('Image', backref='user', lazy=True)
+    image = db.relationship('Image', backref='user', cascade='all, delete-orphan',)
 
     def follow(self, user):
         self.follower_followee.append(user)
@@ -58,8 +58,8 @@ class Room(db.Model):
     name = db.Column(db.String(64))
     description = db.Column(db.String(128))
     creation_date = db.Column(db.DateTime(timezone=True), default=func.now())
-    messages = db.relationship('Message', backref='room', cascade="all, delete")
-    image = db.relationship('Image', backref='room', cascade="all, delete")
+    messages = db.relationship('Message', backref='room', cascade='all, delete-orphan',)
+    image = db.relationship('Image', backref='room', cascade='all, delete-orphan')
 
     users = db.relationship(
         "User", secondary=user_room, back_populates="rooms", cascade="all, delete"
@@ -81,7 +81,7 @@ class Message(db.Model):
     creation_date = db.Column(db.DateTime(timezone=True), default=func.now())
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     room_id = db.Column(db.Integer, db.ForeignKey('room.id'), nullable=False)
-    image = db.relationship('Image', backref='message', lazy=True)
+    image = db.relationship('Image', backref='message', cascade='all, delete-orphan')
 
     @staticmethod
     def get(user_id=None, room_id=None):
@@ -101,7 +101,7 @@ class Post(db.Model):
     content = db.Column(db.Text, nullable=False)
     creation_date = db.Column(db.DateTime(timezone=True), default=func.now())
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    image = db.relationship('Image', backref='post', passive_deletes='all')
+    image = db.relationship('Image', backref='post', cascade='all, delete-orphan')
 
 
 class Image(db.Model):

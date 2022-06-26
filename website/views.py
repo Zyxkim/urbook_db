@@ -532,6 +532,7 @@ def settings():
                 db.session.add(new_image)
             file.save(path)
             db.session.commit()
+            return redirect('/settings')
 
     # return redirect(url_for('views.home'))
     image_path = 'https://catherineasquithgallery.com/uploads/posts/2021-02/1614507972_15-p-yarko-belii-fon-24.jpg'
