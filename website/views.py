@@ -367,6 +367,10 @@ def leave_room():
 @login_required
 def user():
     user_id = request.args.get('id')
+
+    if user_id == str(current_user.id):
+        return redirect('/')
+
     user = User.query.filter_by(id=user_id).first()
     follows = db.session.query(follower_followee).filter_by(follower_id=user_id).all()
     d, followed_user = {}, []
