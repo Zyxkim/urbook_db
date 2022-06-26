@@ -11,6 +11,7 @@ from . import db, UPLOAD_FOLDER
 import json
 import uuid
 
+from .test_data.images import images_profiles, images
 from .test_data.messages import messages
 from .test_data.posts import posts
 from .test_data.rooms import rooms
@@ -74,5 +75,38 @@ def test_messages():
         new_message = Message(content=elem['content'], user_id=random.randint(1, 500), room_id=random.randint(1, 500))
         db.session.add(new_message)
         db.session.commit()
+    end = time.time()
+    return {'Status': 'OK', 'time': (end - start)}
+
+
+@tests.route('/test_follows', methods=['GET'])
+def test_follows():
+    start = time.time()
+    for i in range(0, 250):
+        id_1 = random.randint(1, 250)
+        id_2 = random.randint(250, 500)
+        if id_1 != id_2:
+            user_follow = User.query.filter_by(id=random.randint(1, 500)).first()
+            user_followee = User.query.filter_by(id=random.randint(1, 500)).first()
+            user_followee.follow(user_follow)
+            db.session.commit()
+    end = time.time()
+    return {'Status': 'OK', 'time': (end - start)}
+
+
+@tests.route('/test_images', methods=['GET'])
+def test_images():
+    start = time.time()
+    for i in range(1, 500):
+        new_image = Image(path=images_profiles[random.randint(0, len(images_profiles) - 1)], user_id=i)
+        db.session.add(new_image)
+        new_image = Image(path=images[random.randint(0, len(images) - 1)], post_id=i)
+        db.session.add(new_image)
+        new_image = Image(path=images[random.randint(0, len(images) - 1)], room_id=i)
+        db.session.add(new_image)
+    for i in range(0, 500, 20):
+        new_image = Image(path=images[random.randint(0, len(images) - 1)], message_id=random.randint(1, 500))
+        db.session.add(new_image)
+    db.session.commit()
     end = time.time()
     return {'Status': 'OK', 'time': (end - start)}

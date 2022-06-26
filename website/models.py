@@ -107,7 +107,7 @@ class Post(db.Model):
 class Image(db.Model):
     __tablename__ = 'image'
     id = db.Column(db.Integer, primary_key=True)
-    path = db.Column(db.String(255), unique=True)
+    path = db.Column(db.String(255))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
     room_id = db.Column(db.Integer, db.ForeignKey('room.id'), nullable=True)
     post_id = db.Column(db.Integer, db.ForeignKey('post.id', ondelete='CASCADE'), nullable=True)
