@@ -132,7 +132,7 @@
 
                 <hr class="d-block d-lg-none mt-1 mb-0">
             </div>
-            <div class="col-12 col-lg-7 col-xl-8" style="padding: 0">
+            <div class="col-12 col-lg-7 col-xl-8" style="padding: 0; visibility: hidden" id="chat_space">
                 <div class="py-2 px-2 border-bottom d-none d-lg-block">
                     <div class="d-flex align-items-center py-1">
                         <div class="position-relative">
@@ -219,6 +219,24 @@
     <script type="text/javascript">
         let scrolled = false;
 
+        let getUrlParameter = function getUrlParameter(sParam) {
+            let sPageURL = window.location.search.substring(1),
+                sURLVariables = sPageURL.split('&'),
+                sParameterName,
+                i;
+
+            for (i = 0; i < sURLVariables.length; i++) {
+                sParameterName = sURLVariables[i].split('=');
+
+                if (sParameterName[0] === sParam) {
+                    return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+                }
+            }
+            return false;
+        };
+
+        let in_room = getUrlParameter('id')
+
         $("#chat-history").on('scroll', function () {
             scrolled = true;
         });
@@ -228,6 +246,10 @@
                 let objDiv = document.getElementById("chat-history");
                 objDiv.scrollTop = objDiv.scrollHeight;
             }
+        }
+
+        if (in_room) {
+            $("#chat_space").css("visibility", "visible");
         }
 
         $(window).on('load', function () {
