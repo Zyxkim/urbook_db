@@ -129,7 +129,7 @@
                     </div>
                 </div>
 
-                <div id="rooms" class="px-3 py-3 d-none d-md-block">
+                <div id="rooms" class="px-3 d-none d-md-block" style="overflow-x: auto; height: calc(100vh - 100px); position: relative; margin-top: 20px">
                     {% for room in rooms %}
                         <a href="/rooms?id={{ room.id }}" class="list-group-item list-group-item-action border-0">
                             <div class="d-flex align-items-start">
