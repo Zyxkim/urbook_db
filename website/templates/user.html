@@ -26,7 +26,7 @@
                     <span style="color: #ffffff; font-size: 30pt; font-weight: bold">Book</span>
                 </div>
                 <ul class="navbar-nav flex-column text-left">
-                    <li class="nav-item active">
+                    <li class="nav-item">
                         <a class="nav-link" href="/"><i class="fas fa-book fa-fw mr-2"></i>Home</a>
                     </li>
                     <li class="nav-item">
@@ -142,14 +142,14 @@
             </div>
         </div>
         <hr>
-        <form class="signup-form form-inline justify-content-center pt-0">
+        <div class="signup-form form-inline justify-content-center pt-0">
             <div class="form-group">
-                <input type="text" id="search-text" name="text" class="form-control mr-md-1 semail"
+                <input id="srch" type="text" class="form-control mr-md-1 semail"
                        placeholder="Search...">
             </div>
             <button id="search" class="btn btn-outline-primary mr-1"><i class="fas fa-search"></i></button>
             <div id="follow-btn"></div>
-        </form>
+        </div>
         <div class="container-fluid py-3">
             <div class="container-fluid">
                 <div class="row overflow-auto flex-row flex-nowrap">
@@ -214,6 +214,10 @@
         $(window).on('load', function () {
             const urlParams = new URLSearchParams(window.location.search);
             const id = urlParams.get('id');
+
+            $('#search').click(function () {
+                window.location = "/user?id=" + id + "&text="+ $('#srch').val();
+            });
             $("#follow-btn").empty()
             if (!{{ is_following }}) {
                 $("#follow-btn").append(

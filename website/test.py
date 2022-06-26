@@ -1,15 +1,9 @@
-import os
 import random
 import time
 
-from flask import Blueprint, render_template, request, flash, jsonify, redirect, url_for
-from flask_login import login_required, current_user, login_user
-from werkzeug.security import check_password_hash, generate_password_hash
-
+from flask import Blueprint
 from .models import *
-from . import db, UPLOAD_FOLDER
-import json
-import uuid
+from . import db
 
 from .test_data.images import images_profiles, images
 from .test_data.messages import messages
@@ -54,11 +48,13 @@ def test_rooms():
     for elem in rooms:
         new_room = Room(name=elem['name'], description=elem['description'])
         db.session.add(new_room)
+        db.session.commit()
         role = 'user'
         if random.randint(0, 1) == 0:
             role = 'admin'
+        id = random.randint(1, 500)
         d = {
-            'user_id': current_user.id,
+            'user_id': id,
             'room_id': new_room.id,
             'role': role
         }
