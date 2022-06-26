@@ -17,7 +17,7 @@ follower_followee = db.Table('follower_followee',
 class User(db.Model, UserMixin):
     __tablename__ = 'user'
     id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(150), unique=True, nullable=False)
+    email = db.Column(db.String(128), unique=True, nullable=False)
     password = db.Column(db.String(88), nullable=False)
     nickname = db.Column(db.String(64), unique=True, nullable=False)
     status = db.Column(db.String(255), nullable=True)
@@ -55,7 +55,7 @@ class User(db.Model, UserMixin):
 class Room(db.Model):
     __tablename__ = 'room'
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(64))
+    name = db.Column(db.String(64), nullable=False)
     description = db.Column(db.String(128))
     creation_date = db.Column(db.DateTime(timezone=True), default=func.now())
     messages = db.relationship('Message', backref='room', cascade='all, delete-orphan',)

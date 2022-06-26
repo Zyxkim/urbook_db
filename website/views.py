@@ -26,6 +26,14 @@ def home():
 
         if len(name) < 1:
             flash('Name is too short!', category='error')
+        elif len(name) > 64:
+            flash('Name is too long!', category='error')
+        elif len(content) < 1:
+            flash('Story is too short!', category='error')
+        elif len(description) > 255:
+            flash('Description is too long!', category='error')
+        elif len(fandom) > 64:
+            flash('Fandom name is too long!', category='error')
         else:
             new_post = Post(name=name, description=description, fandom=fandom, content=content, user_id=current_user.id)
             db.session.add(new_post)
@@ -166,7 +174,7 @@ def rooms():
             content = request.form.get('content')
 
             if len(content) < 1:
-                flash('Content is too short!', category='error')
+                flash('Message is too short!', category='error')
             else:
                 new_message = Message(content=content, user_id=current_user.id, room_id=room_id)
                 db.session.add(new_message)
@@ -241,6 +249,10 @@ def create_room():
 
         if len(name) < 1:
             flash('Name is too short!', category='error')
+        elif len(name) > 64:
+            flash('Name is too long!', category='error')
+        elif len(description) > 128:
+            flash('Description is too long!', category='error')
         else:
             new_room = Room(name=name, description=description)
             db.session.add(new_room)
@@ -281,8 +293,14 @@ def edit_room():
 
     room = Room.query.filter_by(id=room_id).first()
     if name:
+        if len(name) < 1:
+            flash('Name is too short!', category='error')
+        elif len(name) > 64:
+            flash('Name is too long!', category='error')
         room.name = name
     if description:
+        if len(description) > 128:
+            flash('Description is too long!', category='error')
         room.description = description
 
     if file:
@@ -490,32 +508,38 @@ def settings():
         user_nickname = User.query.filter_by(nickname=nickname).first()
 
         if user:
-            flash('Аккаунт с таким e-mail существует.', category='error')
+            flash('User with this e-mail already exists.', category='error')
         elif email:
             if len(email) < 4:
-                flash('Минимальная длина e-mail - 4 символа.', category='error')
+                flash('Email is too short: min = 4.', category='error')
+            elif len(email) > 128:
+                flash('Email is too long.', category='error')
             else:
                 current_user.email = email
                 db.session.commit()
 
         if user_nickname:
-            flash('Аккаунт с таким nickname существует.', category='error')
+            flash('User with this nickname already exists.', category='error')
         elif nickname:
             if len(nickname) < 2:
-                flash('Минимальная длина ника - 2 символа.', category='error')
+                flash('Nickname is too short: min = 2.', category='error')
+            elif len(nickname) > 64:
+                flash('Nickname is too long.', category='error')
             else:
                 current_user.nickname = nickname
                 db.session.commit()
 
         if status:
+            if len(status) > 255:
+                flash('Status is too long.', category='error')
             current_user.status = status
             db.session.commit()
 
         if password1:
             if len(password1) < 4:
-                flash('Минимальная длина pass - 4 символа.', category='error')
+                flash('Password is too short: min = 4.', category='error')
             elif password1 != password2:
-                flash('Пароли не совпадают.', category='error')
+                flash('Passwords don\'t match.', category='error')
             else:
                 current_user.password = generate_password_hash(password1, method='sha256')
                 db.session.commit()

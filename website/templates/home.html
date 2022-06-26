@@ -74,6 +74,16 @@
                         <section class="blog-list px-3 py-5 p-md-4">
                             <div class="container">
                                 <form method="POST" enctype="multipart/form-data">
+                                    {% with messages = get_flashed_messages(with_categories=true) %} {% if
+                                        messages %} {% for category, message in messages %} {% if category == 'error' %}
+                                        <div class="alert alert-danger alter-dismissable fade show" role="alert">
+                                            {{ message }}
+                                            <button type="button" class="close" data-dismiss="alert">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+
+                                    {% endif %} {% endfor %} {% endif %} {% endwith %}
                                     <div class="row mb-2">
                                         <div class="col">
                                             <div class="form-outline">
@@ -108,7 +118,7 @@
                                         <label class="form-label" for="content">Story</label>
                                     </div>
 
-                                    <button class="btn btn-primary btn-block">Save</button>
+                                    <button class="btn btn-primary btn-block" type="submit">Save</button>
                                 </form>
                             </div>
                         </section>
