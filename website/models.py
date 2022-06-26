@@ -25,12 +25,15 @@ class User(db.Model, UserMixin):
 
     posts = db.relationship('Post')
     messages = db.relationship('Message', backref='user', lazy=True)
-    # user_room = db.relationship('Room', secondary=user_room, lazy='subquery', backref=db.backref('rooms', lazy=True))
-    user_room = db.relationship(
+    '''user_room = db.relationship(
         'Room', secondary=user_room,
         primaryjoin=(user_room.c.user_id == id),
         secondaryjoin=(user_room.c.room_id == id),
-        backref=db.backref('users', lazy='dynamic'), lazy='dynamic')
+        backref=db.backref('users', lazy='dynamic'), lazy='dynamic')'''
+
+    rooms = db.relationship(
+        "Room", secondary=user_room, back_populates="users"
+    )
     follower_followee = db.relationship(
         'User', secondary=follower_followee,
         primaryjoin=(follower_followee.c.follower_id == id),
@@ -55,8 +58,12 @@ class Room(db.Model):
     name = db.Column(db.String(64))
     description = db.Column(db.String(128))
     creation_date = db.Column(db.DateTime(timezone=True), default=func.now())
-    messages = db.relationship('Message', backref='room', lazy=True)
-    image = db.relationship('Image', backref='room', lazy=True)
+    messages = db.relationship('Message', backref='room', cascade="all, delete")
+    image = db.relationship('Image', backref='room', cascade="all, delete")
+
+    users = db.relationship(
+        "User", secondary=user_room, back_populates="rooms", cascade="all, delete"
+    )
 
     @staticmethod
     def get(id=None, name=None):
