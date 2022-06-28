@@ -30,6 +30,21 @@ def test_users():
     return {'Status': 'OK', 'time': (end - start)}
 
 
+@tests.route('/test_users_sql', methods=['GET'])
+def test_users_sql():
+    start = time.time()
+    for elem in users:
+        user_nickname = User.query.filter_by(nickname=elem['nickname']).first()
+        user_email = User.query.filter_by(email=elem['email']).first()
+        if user_email or user_nickname:
+            continue
+        db.engine.execute(
+            "INSERT INTO \"user\"(email, nickname,status, password) VALUES(\'{}\', \'{}\', \'{}\', \'{}\')".format(
+                elem['email'], elem['nickname'], elem['status'], elem['password']))
+    end = time.time()
+    return {'Status': 'OK', 'time': (end - start)}
+
+
 @tests.route('/test_posts', methods=['GET'])
 def test_posts():
     start = time.time()
@@ -38,6 +53,17 @@ def test_posts():
                         content=elem['content'], user_id=random.randint(1, 500))
         db.session.add(new_post)
         db.session.commit()
+    end = time.time()
+    return {'Status': 'OK', 'time': (end - start)}
+
+
+@tests.route('/test_posts_sql', methods=['GET'])
+def test_posts_sql():
+    start = time.time()
+    for elem in posts:
+        db.engine.execute(
+            "INSERT INTO \"post\"(name, description,fandom, content,user_id) VALUES(\'{}\', \'{}\', \'{}\', \'{}\', {})".format(
+                elem['name'], elem['description'], elem['fandom'], elem['content'], random.randint(1, 500)))
     end = time.time()
     return {'Status': 'OK', 'time': (end - start)}
 
@@ -64,6 +90,28 @@ def test_rooms():
     return {'Status': 'OK', 'time': (end - start)}
 
 
+@tests.route('/test_rooms_sql', methods=['GET'])
+def test_rooms_sql():
+    start = time.time()
+    for elem in rooms:
+        new_room = Room(name=elem['name'], description=elem['description'])
+        db.session.add(new_room)
+        db.session.commit()
+        role = 'user'
+        if random.randint(0, 1) == 0:
+            role = 'admin'
+        id = random.randint(1, 500)
+        d = {
+            'user_id': id,
+            'room_id': new_room.id,
+            'role': role
+        }
+        db.engine.execute(
+            "INSERT INTO \"user_room\"(room_id, user_id,role) VALUES({}, {}, \'{}\')".format(new_room.id, id, role))
+    end = time.time()
+    return {'Status': 'OK', 'time': (end - start)}
+
+
 @tests.route('/test_messages', methods=['GET'])
 def test_messages():
     start = time.time()
@@ -74,6 +122,14 @@ def test_messages():
     end = time.time()
     return {'Status': 'OK', 'time': (end - start)}
 
+@tests.route('/test_messages_sql', methods=['GET'])
+def test_messages_sql():
+    start = time.time()
+    for elem in messages:
+        db.engine.execute(
+            "INSERT INTO \"message\"(content, user_id,room_id) VALUES(\'{}\', {}, {})".format(elem['content'], random.randint(1, 500), random.randint(1, 500)))
+    end = time.time()
+    return {'Status': 'OK', 'time': (end - start)}
 
 @tests.route('/test_follows', methods=['GET'])
 def test_follows():
@@ -82,10 +138,23 @@ def test_follows():
         id_1 = random.randint(1, 250)
         id_2 = random.randint(250, 500)
         if id_1 != id_2:
-            user_follow = User.query.filter_by(id=random.randint(1, 500)).first()
-            user_followee = User.query.filter_by(id=random.randint(1, 500)).first()
+            user_follow = User.query.filter_by(id=id_1).first()
+            user_followee = User.query.filter_by(id=id_2).first()
             user_followee.follow(user_follow)
             db.session.commit()
+    end = time.time()
+    return {'Status': 'OK', 'time': (end - start)}
+
+
+@tests.route('/test_follows_sql', methods=['GET'])
+def test_follows_sql():
+    start = time.time()
+    for i in range(0, 250):
+        id_1 = random.randint(1, 250)
+        id_2 = random.randint(250, 500)
+        if id_1 != id_2:
+            db.engine.execute(
+                "INSERT INTO \"follower_followee\"(follower_id, followee_id) VALUES({}, {})".format(id_1, id_2))
     end = time.time()
     return {'Status': 'OK', 'time': (end - start)}
 
@@ -104,5 +173,22 @@ def test_images():
         new_image = Image(path=images[random.randint(0, len(images) - 1)], message_id=random.randint(1, 500))
         db.session.add(new_image)
     db.session.commit()
+    end = time.time()
+    return {'Status': 'OK', 'time': (end - start)}
+
+
+@tests.route('/test_images_sql', methods=['GET'])
+def test_images_sql():
+    start = time.time()
+    for i in range(1, 500):
+        db.engine.execute(
+            "INSERT INTO \"image\"(path, user_id) VALUES(\'{}\', {})".format(images_profiles[random.randint(0, len(images_profiles) - 1)], i))
+        db.engine.execute(
+            "INSERT INTO \"image\"(path, post_id) VALUES(\'{}\', {})".format(images[random.randint(0, len(images_profiles) - 1)], i))
+        db.engine.execute(
+            "INSERT INTO \"image\"(path, room_id) VALUES(\'{}\', {})".format(images[random.randint(0, len(images_profiles) - 1)], i))
+    for i in range(0, 500, 20):
+        db.engine.execute(
+            "INSERT INTO \"image\"(path, message_id) VALUES(\'{}\', {})".format(images[random.randint(0, len(images_profiles) - 1)], random.randint(1, 500)))
     end = time.time()
     return {'Status': 'OK', 'time': (end - start)}
